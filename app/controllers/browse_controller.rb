@@ -23,7 +23,7 @@ class BrowseController < ApplicationController
     dummy = {
       title: content_item["title"],
       description: content_item["description"],
-      featured: most_popular_content["results"].map { |popular| { title: popular["title"], link: ["_id"] } },
+      featured: most_popular_content["results"].map { |popular| { title: popular["title"], link: popular["_id"] } },
       subtopics: subtopic_order.map{ |content_id|
 
         subtopic = subtopics.detect{|s| s["content_id"] == content_id }
