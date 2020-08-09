@@ -20,10 +20,9 @@ class BrowseController < ApplicationController
     latest_news_query_params = {
       count: 1,
       filter_content_purpose_supergroup: "news_and_communications",
-      # filter_mainstream_browse_pages: subtopics.map { |subtopic| subtopic["base_path"].sub!("/browse/", "") },
       fields: %w[title description image_url],
       order: "-public_timestamp"
-    }
+    }.merge(topic_filter(browse_slug))
 
     most_popular_content = HTTParty.get("https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}")["results"]
     latest_news_content = HTTParty.get("https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}")["results"]
@@ -60,6 +59,16 @@ class BrowseController < ApplicationController
   end
 
 private
+
+  def topic_filter(browse_slug)
+    if browse_slug == "benefits"
+      { filter_part_of_taxonomy_tree: "dded88e2-f92e-424f-b73e-6ad24a839c51"}
+    elsif browse_slug == "visas-immigration"
+      { filter_part_of_taxonomy_tree: "ba3a9702-da22-487f-86c1-8334a730e559" }
+    else
+     {}
+    end
+  end
 
   def accordion_content(subtopic_details)
     subtopic_details["details"]["groups"].map { |detail|
