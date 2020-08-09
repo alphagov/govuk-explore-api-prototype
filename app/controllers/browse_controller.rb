@@ -17,13 +17,27 @@ class BrowseController < ApplicationController
       fields: "title"
     }
 
-    puts "https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}"
-    most_popular_content = HTTParty.get("https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}")
+    latest_news_query_params = {
+      count: 1,
+      filter_content_purpose_supergroup: "news_and_communications",
+      # filter_mainstream_browse_pages: subtopics.map { |subtopic| subtopic["base_path"].sub!("/browse/", "") },
+      fields: %w[title description image_url],
+      order: "-public_timestamp"
+    }
+
+    most_popular_content = HTTParty.get("https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}")["results"]
+    latest_news_content = HTTParty.get("https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}")["results"]
 
     dummy = {
       title: content_item["title"],
       description: content_item["description"],
-      featured: most_popular_content["results"].map { |popular| { title: popular["title"], link: popular["_id"] } },
+      latest_news: {
+        title: latest_news_content.first["title"],
+        description: latest_news_content.first["description"],
+        url: latest_news_content.first["_id"],
+        image_url: latest_news_content.first["image_url"],
+      },
+      featured: most_popular_content.map { |popular| { title: popular["title"], link: popular["_id"] } },
       subtopics: subtopic_order.map{ |content_id|
 
         subtopic = subtopics.detect{|s| s["content_id"] == content_id }
