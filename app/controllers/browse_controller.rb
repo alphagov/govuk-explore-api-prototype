@@ -93,7 +93,7 @@ private
   end
 
   def alphabetical_accordion_list_items(tagged_children)
-    tagged_children.map { |child|
+    tagged_children.sort_by { |child| child["title"] }.map { |child|
       "<li><a href='#{child["base_path"]}'>#{child["title"]}</a></li>"
     }.join
   end
