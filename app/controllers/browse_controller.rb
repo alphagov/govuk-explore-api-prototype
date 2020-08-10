@@ -72,7 +72,13 @@ private
 
   def accordion_content(subtopic_details)
     subtopic_details["details"]["groups"].map { |detail|
-      list = accordion_list_items(detail["contents"], subtopic_details["links"]["children"])
+
+      list = if subtopic_details["details"]["second_level_ordering"] == "alphabetical"
+        alphabetical_accordion_list_items(subtopic_details["links"]["children"])
+      else
+        curated_accordion_list_items(detail["contents"], subtopic_details["links"]["children"])
+      end
+
       next if list.empty?
       {
         heading: { text: detail["name"] },
@@ -81,7 +87,13 @@ private
     }.compact
   end
 
-  def accordion_list_items(ordered_paths, tagged_children)
+  def alphabetical_accordion_list_items(tagged_children)
+    tagged_children.map { |child|
+      "<li><a href='#{child["base_path"]}'>#{current_item["title"]}</a></li>"
+    }.join
+  end
+
+  def curated_accordion_list_items(ordered_paths, tagged_children)
     tagged_children_paths = tagged_children.map { |child| child["base_path"] }
 
     ordered_paths
