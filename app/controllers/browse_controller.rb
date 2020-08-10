@@ -34,7 +34,7 @@ class BrowseController < ApplicationController
         title: latest_news_content.first["title"],
         description: latest_news_content.first["description"],
         url: latest_news_content.first["_id"],
-        image_url: latest_news_content.first["image_url"],
+        image_url: latest_news_content.first["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
       },
       featured: most_popular_content.map { |popular| { title: popular["title"], link: popular["_id"] } },
       subtopics: subtopic_order.map{ |content_id|
@@ -72,7 +72,6 @@ private
 
   def accordion_content(subtopic_details)
     subtopic_details["details"]["groups"].map { |detail|
-
       list = if subtopic_details["details"]["second_level_ordering"] == "alphabetical"
         alphabetical_accordion_list_items(subtopic_details["links"]["children"])
       else
@@ -89,7 +88,7 @@ private
 
   def alphabetical_accordion_list_items(tagged_children)
     tagged_children.map { |child|
-      "<li><a href='#{child["base_path"]}'>#{current_item["title"]}</a></li>"
+      "<li><a href='#{child["base_path"]}'>#{child["title"]}</a></li>"
     }.join
   end
 
