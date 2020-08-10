@@ -71,19 +71,25 @@ private
   end
 
   def accordion_content(subtopic_details)
-    subtopic_details["details"]["groups"].map { |detail|
-      # list = if subtopic_details["details"]["second_level_ordering"] == "alphabetical"
-      #   alphabetical_accordion_list_items(subtopic_details["links"]["children"])
-      # else
-list = curated_accordion_list_items(detail["contents"], subtopic_details["links"]["children"])
-      # end
+    groups = subtopic_details["details"]["groups"].any? ? subtopic_details["details"]["groups"] : default_group
+
+    groups.map { |detail|
+      list = if subtopic_details["details"]["second_level_ordering"] == "alphabetical" || detail["contents"].nil?
+        alphabetical_accordion_list_items(subtopic_details["links"]["children"])
+      else
+        curated_accordion_list_items(detail["contents"], subtopic_details["links"]["children"])
+      end
 
       next if list.empty?
       {
-        heading: { text: detail["name"] },
+        heading: { text: detail["name"] || "A to Z" },
         content: { html:  "<ul class='govuk-list'>#{list}</ul>" }
       }
     }.compact
+  end
+
+  def default_group
+    [{ name: "A to Z" }]
   end
 
   def alphabetical_accordion_list_items(tagged_children)
