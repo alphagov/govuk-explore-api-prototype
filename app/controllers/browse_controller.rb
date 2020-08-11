@@ -27,7 +27,7 @@ class BrowseController < ApplicationController
     most_popular_content = HTTParty.get("https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}")["results"]
     latest_news_content = HTTParty.get("https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}")["results"]
 
-    dummy = {
+    payload = {
       title: content_item["title"],
       description: content_item["description"],
       latest_news: {
@@ -56,7 +56,46 @@ class BrowseController < ApplicationController
       }.compact
     }
 
-    render json: dummy
+    render json: payload
+  end
+
+  def subtopic
+    topic_slug = params[:slug]
+    subtopic_slug = params[:subtopic_slug]
+
+    subtopic_details = subtopic_details = HTTParty.get("https://www.gov.uk/api/content/browse/#{topic_slug}/#{subtopic_slug}").parsed_response
+
+    popular_content_query_params = {
+      count: 3,
+      filter_mainstream_browse_pages: "#{topic_slug}/#{subtopic_slug}",
+      fields: "title"
+    }
+
+    latest_news_query_params = {
+      count: 1,
+      filter_content_purpose_supergroup: "news_and_communications",
+      fields: %w[title description image_url],
+      order: "-public_timestamp"
+    }.merge(topic_filter(topic_slug))
+
+    puts "https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}"
+    most_popular_content = HTTParty.get("https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}")["results"]
+    latest_news_content = HTTParty.get("https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}")["results"]
+
+    payload = {
+      title: subtopic_details["title"],
+      description: subtopic_details["description"],
+      latest_news: {
+        title: latest_news_content.first["title"],
+        description: latest_news_content.first["description"],
+        url: latest_news_content.first["_id"],
+        image_url: latest_news_content.first["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
+      },
+      featured: most_popular_content.map { |popular| { title: popular["title"], link: popular["_id"] } },
+      subtopic_sections: { items: accordion_content(subtopic_details) }
+    }
+
+    render json: payload
   end
 
 private
