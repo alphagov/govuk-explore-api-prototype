@@ -48,6 +48,7 @@ class BrowseController < ApplicationController
 
         {
           title: subtopic["title"],
+          link: "/browse/" +subtopic["base_path"],
           subtopic_sections: {
             items: content
           }
