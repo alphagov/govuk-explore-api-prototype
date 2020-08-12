@@ -52,6 +52,7 @@ class BrowseController < ApplicationController
     payload = {
       title: subtopic_details["title"],
       description: subtopic_details["description"],
+      parent_url: "/browse/#{topic_slug}",
       latest_news: {
         title: latest_news_content.first["title"],
         description: latest_news_content.first["description"],
