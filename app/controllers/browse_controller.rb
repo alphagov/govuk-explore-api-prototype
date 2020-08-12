@@ -32,7 +32,7 @@ class BrowseController < ApplicationController
 
         {
           title: subtopic["title"],
-          link: "/browse/" +subtopic["base_path"],
+          link: subtopic["base_path"],
           subtopic_sections: {
             items: content
           }
@@ -78,7 +78,6 @@ private
   end
 
   def accordion_content(subtopic_details)
-    puts subtopic_details["base_path"]
     groups = subtopic_details["details"]["groups"].any? ? subtopic_details["details"]["groups"] : default_group
 
     groups.map { |detail|
