@@ -53,6 +53,7 @@ class BrowseController < ApplicationController
       title: subtopic_details["title"],
       description: subtopic_details["description"],
       parent_url: "/browse/#{topic_slug}",
+      taxon_search_filter: taxon_filter(subtopic_slug),
       latest_news: {
         title: latest_news_content.first["title"],
         description: latest_news_content.first["description"],
@@ -76,10 +77,10 @@ private
   end
 
   def topic_filter(browse_slug)
-    if browse_slug == "benefits"
-      { filter_part_of_taxonomy_tree: "dded88e2-f92e-424f-b73e-6ad24a839c51"}
-    elsif browse_slug == "visas-immigration"
-      { filter_part_of_taxonomy_tree: "ba3a9702-da22-487f-86c1-8334a730e559" }
+    taxon_id = taxon_lookup[browse_slug]
+
+    if taxon_id.present?
+      { filter_part_of_taxonomy_tree: taxon_id }
     else
      {}
     end
@@ -174,5 +175,40 @@ private
 
       latest_news_content = HTTParty.get("https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}")["results"]
     end
+  end
+
+  def taxon_filter(slug)
+    taxon_id = taxon_lookup[slug]
+    if taxon_id.present?
+      "level_one_taxon=#{taxon_id}"
+    else
+      ""
+    end
+  end
+
+  def taxon_lookup
+    {
+      "benefits" => "dded88e2-f92e-424f-b73e-6ad24a839c51",
+      "entitlement" => "536f83c0-8c67-47a3-88a4-d5b1eda591ed",
+      "universal-credit" => "62fcbba5-3a75-4d15-85a6-d8a80b03d57c",
+      "tax-credits" => "a7f3005b-a3cd-4060-a127-725accb54f2e",
+      "jobseekers-allowance" => "2a1bd1b1-5025-4313-9e5b-8352dd46f1d6",
+      "disability" => "05a9527b-e6e9-4a68-8dd7-7d84e6a24eef",
+      "child" => "7a1ba896-b85a-4137-81d9-ab05b7ce67dd",
+      "families" => "29dbee2a-5865-489b-860f-7eef54a5165a",
+      "heating" => "6c4c443c-2e11-4d25-aa93-2e3a38d9499c",
+      "bereavement" => "ac7b8472-5d09-4679-9551-87847b0ac827",
+      "visas-immigration" => "ba3a9702-da22-487f-86c1-8334a730e559",
+      "what-you-need-to-do" => "6dc91505-fdbd-4b6b-9bd5-fef3dc8baf42",
+      "eu-eea-commonwealth" => "ba3a9702-da22-487f-86c1-8334a730e559",
+      "tourist-short-stay-visas" => "9480b00-dc4d-49a0-b48c-25dda8569325",
+      "student-visas" => "9480b00-dc4d-49a0-b48c-25dda8569325",
+      "work-visas" => "f48188df-8130-4d36-98e0-e72125d016a2",
+      "family-visas" => "9480b00-dc4d-49a0-b48c-25dda8569325",
+      "settle-in-the-uk" => "fef7e737-6f1a-4ef4-b844-aa24b630ad03",
+      "asylum" => "08a8a69f-2825-4fe2-a4cf-c83458a5629e",
+      "immigration-appeals" => "6e85c12f-f52b-41b3-93ad-59e5f19d64f6",
+      "arriving-in-the-uk" => "ba3a9702-da22-487f-86c1-8334a730e559",
+    }
   end
 end
