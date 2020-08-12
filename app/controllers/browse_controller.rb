@@ -59,13 +59,20 @@ class BrowseController < ApplicationController
         image_url: latest_news_content.first["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
       },
       featured: most_popular_content([subtopic_details]),
-      subtopic_sections: { items: accordion_content(subtopic_details) }
+      subtopic_sections: { items: accordion_content(subtopic_details) },
+      related_topics: related_topics(subtopic_details)
     }
 
     render json: payload
   end
 
 private
+
+  def related_topics(subtopic_details)
+    (subtopic_details["links"]["related_topics"] || []).map { |topic|
+      { title: topic["title"], link: topic["base_path"] }
+    }
+  end
 
   def topic_filter(browse_slug)
     if browse_slug == "benefits"
