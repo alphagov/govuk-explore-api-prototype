@@ -90,7 +90,7 @@ private
     groups = subtopic_details["details"]["groups"].any? ? subtopic_details["details"]["groups"] : default_group
 
     groups.map { |detail|
-      list = if subtopic_details["links"]["children"].nil?
+      list = if subtopic_details["groups"].nil?
         search_accordion_list_items(subtopic_details)
       elsif subtopic_details["details"]["second_level_ordering"] == "alphabetical" || detail["contents"].nil?
         alphabetical_accordion_list_items(subtopic_details["links"]["children"])
@@ -128,7 +128,7 @@ private
   end
 
   def search_accordion_list_items(subtopic_details)
-    accordion_items_from_search(subtopic_details).sort_by { |child| child["title"] }.map { |child|
+    accordion_items_from_search(subtopic_details).map { |child|
       "<li><a href='#{child[:link]}'>#{child[:title]}</a></li>"
     }.join
   end
@@ -136,12 +136,14 @@ private
   def accordion_items_from_search(subtopic_details)
     @accordion_items_from_search ||= begin
       browse_content_query_params = {
-        count: 3,
-        filter_mainstream_browse_pages: subtopic_details["base_path"].sub("/browse/", ""),
-        fields: "title"
+        count: 100,
+        filter_mainstream_browse_page_content_ids: subtopic_details["content_id"].sub("/browse/", ""),
+        fields: "title",
+        order: "title",
       }
+      puts "https://www.gov.uk/api/search.json?#{browse_content_query_params.to_query}"
       results = HTTParty.get("https://www.gov.uk/api/search.json?#{browse_content_query_params.to_query}")["results"]
-      results.map { |result| { title: result["title"], link: result["_id"] } }
+      results.map { |result| { title: result["title"].strip, link: result["_id"] } }
     end
   end
 
