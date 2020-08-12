@@ -47,7 +47,7 @@ class BrowseController < ApplicationController
     topic_slug = params[:slug]
     subtopic_slug = params[:subtopic_slug]
 
-    subtopic_details = subtopic_details = HTTParty.get("https://www.gov.uk/api/content/browse/#{topic_slug}/#{subtopic_slug}").parsed_response
+    subtopic_details = HTTParty.get("https://www.gov.uk/api/content/browse/#{topic_slug}/#{subtopic_slug}").parsed_response
 
     payload = {
       title: subtopic_details["title"],
@@ -129,7 +129,7 @@ private
     @accordion_items_from_search ||= begin
       browse_content_query_params = {
         count: 3,
-        filter_mainstream_browse_pages: subtopic_details["base_path"].sub!("/browse/", ""),
+        filter_mainstream_browse_pages: subtopic_details["base_path"].sub("/browse/", ""),
         fields: "title"
       }
       results = HTTParty.get("https://www.gov.uk/api/search.json?#{browse_content_query_params.to_query}")["results"]
@@ -141,7 +141,7 @@ private
     @most_popular_content ||= begin
       popular_content_query_params = {
         count: 3,
-        filter_mainstream_browse_pages: subtopics.map { |subtopic| subtopic["base_path"].sub!("/browse/", "") },
+        filter_mainstream_browse_pages: subtopics.map { |subtopic| subtopic["base_path"].sub("/browse/", "") },
         fields: "title"
       }
       HTTParty.get("https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}")["results"]
