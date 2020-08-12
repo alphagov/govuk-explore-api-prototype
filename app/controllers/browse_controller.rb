@@ -168,10 +168,10 @@ private
     @latest_news_content ||= begin
       latest_news_query_params = {
         count: 1,
-        filter_content_purpose_supergroup: "news_and_communications",
+        filter_content_purpose_subgroup: "news",
         fields: %w[title description image_url],
         order: "-public_timestamp"
-      }.merge(topic_filter(params[:slug]))
+      }.merge(topic_filter(params[:subtopic_slug] || params[:slug]))
 
       latest_news_content = HTTParty.get("https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}")["results"]
     end
