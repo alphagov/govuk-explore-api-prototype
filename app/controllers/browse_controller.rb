@@ -69,7 +69,7 @@ class BrowseController < ApplicationController
 private
 
   def related_topics(subtopic_details)
-    (subtopic_details["links"]["related_topics"] || []).map { |topic|
+    (subtopic_details["links"]["second_level_browse_pages"] || []).map { |topic|
       { title: topic["title"], link: topic["base_path"] }
     }
   end
