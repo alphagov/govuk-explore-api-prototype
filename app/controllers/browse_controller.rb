@@ -91,12 +91,12 @@ private
     groups = subtopic_details["details"]["groups"].any? ? subtopic_details["details"]["groups"] : default_group
 
     groups.map { |detail|
-      list = if subtopic_details["details"]["groups"].nil?
+      list = if subtopic_details["details"]["groups"].nil? || subtopic_details["details"]["groups"].empty?
         search_accordion_list_items(subtopic_details)
       elsif subtopic_details["details"]["second_level_ordering"] == "alphabetical" || detail["contents"].nil?
         alphabetical_accordion_list_items(subtopic_details["links"]["children"])
       else
-        curated_accordion_list_items(detail["contents"], subtopic_details["links"]["children"])
+        curated_accordion_list_items(detail["contents"], accordion_items_from_search(subtopic_details))
       end
 
       next if list.empty?
@@ -117,14 +117,14 @@ private
     }.join
   end
 
-  def curated_accordion_list_items(ordered_paths, tagged_children)
-    tagged_children_paths = tagged_children.map { |child| child["base_path"] }
+  def curated_accordion_list_items(ordered_paths, results)
+    tagged_children_paths = results.map { |child| child[:link] }
 
     ordered_paths
       .select{ |path| tagged_children_paths.include? path }
       .map { |path|
-        current_item = tagged_children.detect { |child| child["base_path"] == path }
-        "<li><a href='#{path}'>#{current_item["title"]}</a></li>"
+        current_item = results.detect { |child| child[:link] == path }
+        "<li><a href='#{path}'>#{current_item[:title]}</a></li>"
       }.join
   end
 
