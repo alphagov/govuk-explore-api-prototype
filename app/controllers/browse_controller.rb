@@ -167,7 +167,7 @@ private
   end
 
   def latest_news_content
-    @latest_news_content ||= begin
+    latest_news_content ||= begin
       latest_news_query_params = {
         count: 1,
         filter_content_purpose_subgroup: "news",
