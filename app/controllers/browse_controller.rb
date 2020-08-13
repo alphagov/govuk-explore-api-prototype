@@ -134,7 +134,7 @@ private
   end
 
   def accordion_items_from_search(subtopic_details)
-    @accordion_items_from_search ||= begin
+    accordion_items_from_search ||= begin
       browse_content_query_params = {
         count: 100,
         filter_mainstream_browse_page_content_ids: subtopic_details["content_id"].sub("/browse/", ""),
@@ -148,7 +148,7 @@ private
   end
 
   def most_popular_content_results(subtopics)
-    @most_popular_content ||= begin
+    most_popular_content ||= begin
       popular_content_query_params = {
         count: 3,
         filter_mainstream_browse_pages: subtopics.map { |subtopic| subtopic["base_path"].sub("/browse/", "") },
