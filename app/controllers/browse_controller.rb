@@ -14,6 +14,7 @@ class BrowseController < ApplicationController
     payload = {
       title: content_item["title"],
       description: content_item["description"],
+      taxon_search_filter: (taxon_filter_lookup[browse_slug] || ""),
       latest_news: {
         title: latest_news_content.first["title"],
         description: latest_news_content.first["description"],
