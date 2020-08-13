@@ -90,7 +90,7 @@ private
     groups = subtopic_details["details"]["groups"].any? ? subtopic_details["details"]["groups"] : default_group
 
     groups.map { |detail|
-      list = if subtopic_details["groups"].nil?
+      list = if subtopic_details["details"]["groups"].nil?
         search_accordion_list_items(subtopic_details)
       elsif subtopic_details["details"]["second_level_ordering"] == "alphabetical" || detail["contents"].nil?
         alphabetical_accordion_list_items(subtopic_details["links"]["children"])
