@@ -6,7 +6,7 @@ class BrowseController < ApplicationController
     browse_slug = params[:slug]
 
     url = "https://www.gov.uk/api/content/browse/#{browse_slug}"
-    content_item = HTTParty.get(url).parsed_response
+    content_item = http_get(url).parsed_response
 
     subtopic_order = content_item["details"]["ordered_second_level_browse_pages"]
     subtopics = content_item["links"]["second_level_browse_pages"]
@@ -27,7 +27,7 @@ class BrowseController < ApplicationController
         subtopic = subtopics.detect{|s| s["content_id"] == content_id }
         next if subtopic.nil?
 
-        subtopic_details = HTTParty.get(subtopic["api_url"]).parsed_response
+        subtopic_details = http_get(subtopic["api_url"]).parsed_response
 
         content =  accordion_content(subtopic_details)
 
@@ -48,7 +48,7 @@ class BrowseController < ApplicationController
     topic_slug = params[:slug]
     subtopic_slug = params[:subtopic_slug]
 
-    subtopic_details = HTTParty.get("https://www.gov.uk/api/content/browse/#{topic_slug}/#{subtopic_slug}").parsed_response
+    subtopic_details = http_get("https://www.gov.uk/api/content/browse/#{topic_slug}/#{subtopic_slug}").parsed_response
 
     payload = {
       title: subtopic_details["title"],
@@ -90,13 +90,15 @@ private
   def accordion_content(subtopic_details)
     groups = subtopic_details["details"]["groups"].any? ? subtopic_details["details"]["groups"] : default_group
 
+    items_from_search = accordion_items_from_search(subtopic_details)
+
     groups.map { |detail|
       list = if subtopic_details["details"]["groups"].nil? || subtopic_details["details"]["groups"].empty?
-        search_accordion_list_items(subtopic_details)
+        search_accordion_list_items(items_from_search)
       elsif subtopic_details["details"]["second_level_ordering"] == "alphabetical" || detail["contents"].nil?
         alphabetical_accordion_list_items(subtopic_details["links"]["children"])
       else
-        curated_accordion_list_items(detail["contents"], accordion_items_from_search(subtopic_details))
+        curated_accordion_list_items(detail["contents"], items_from_search)
       end
 
       next if list.empty?
@@ -117,19 +119,19 @@ private
     }.join
   end
 
-  def curated_accordion_list_items(ordered_paths, results)
-    tagged_children_paths = results.map { |child| child[:link] }
+  def curated_accordion_list_items(ordered_paths, items_from_search)
+    tagged_children_paths = items_from_search.map { |child| child[:link] }
 
     ordered_paths
       .select{ |path| tagged_children_paths.include? path }
       .map { |path|
-        current_item = results.detect { |child| child[:link] == path }
+        current_item = items_from_search.detect { |child| child[:link] == path }
         "<li><a href='#{path}'>#{current_item[:title]}</a></li>"
       }.join
   end
 
-  def search_accordion_list_items(subtopic_details)
-    accordion_items_from_search(subtopic_details).map { |child|
+  def search_accordion_list_items(items_from_search)
+    items_from_search.map { |child|
       "<li><a href='#{child[:link]}'>#{child[:title]}</a></li>"
     }.join
   end
@@ -142,8 +144,8 @@ private
         fields: "title",
         order: "title",
       }
-      puts "https://www.gov.uk/api/search.json?#{browse_content_query_params.to_query}"
-      results = HTTParty.get("https://www.gov.uk/api/search.json?#{browse_content_query_params.to_query}")["results"]
+      # puts "https://www.gov.uk/api/search.json?#{browse_content_query_params.to_query}"
+      results = http_get("https://www.gov.uk/api/search.json?#{browse_content_query_params.to_query}")["results"]
       results.map { |result| { title: result["title"].strip, link: result["_id"] } }
     end
   end
@@ -155,7 +157,7 @@ private
         filter_mainstream_browse_pages: subtopics.map { |subtopic| subtopic["base_path"].sub("/browse/", "") },
         fields: "title"
       }
-      HTTParty.get("https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}")["results"]
+      http_get("https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}")["results"]
     end
   end
 
@@ -168,7 +170,7 @@ private
   end
 
   def latest_news_content
-    latest_news_content ||= begin
+    @latest_news_content ||= begin
       latest_news_query_params = {
         count: 1,
         filter_content_purpose_subgroup: "news",
@@ -176,7 +178,8 @@ private
         order: "-public_timestamp"
       }.merge(topic_filter(params[:subtopic_slug] || params[:slug]))
 
-      latest_news_content = HTTParty.get("https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}")["results"]
+      # puts "https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}"
+      latest_news_content = http_get("https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}")["results"]
     end
   end
 
@@ -239,5 +242,10 @@ private
       "immigration-appeals" => "level_one_taxon=ba3a9702-da22-487f-86c1-8334a730e559&level_two_taxon=6e85c12f-f52b-41b3-93ad-59e5f19d64f6",
       "arriving-in-the-uk" => "level_one_taxon=ba3a9702-da22-487f-86c1-8334a730e559&level_two_taxon=ba3a9702-da22-487f-86c1-8334a730e559",
     }
+  end
+
+  def http_get(url)
+    puts "!!!!!!!!!!!!! getting #{url}"
+    HTTParty.get(url)
   end
 end
