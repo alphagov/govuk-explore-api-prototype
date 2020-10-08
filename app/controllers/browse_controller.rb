@@ -15,11 +15,13 @@ class BrowseController < ApplicationController
       title: content_item["title"],
       description: content_item["description"],
       taxon_search_filter: (taxon_filter_lookup[browse_slug] || ""),
-      latest_news: {
-        title: latest_news_content.first["title"],
-        description: latest_news_content.first["description"],
-        url: latest_news_content.first["_id"],
-        image_url: latest_news_content.first["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
+      latest_news: latest_news_content.map{ |news_result|
+        {
+          title: news_result["title"],
+          description: news_result["description"],
+          url: news_result["_id"],
+          image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
+        }
       },
       featured: most_popular_content(subtopics),
       subtopics: subtopic_order.map{ |content_id|
@@ -172,7 +174,7 @@ private
   def latest_news_content
     @latest_news_content ||= begin
       latest_news_query_params = {
-        count: 1,
+        count: 5,
         filter_content_purpose_subgroup: "news",
         fields: %w[title description image_url],
         order: "-public_timestamp"
@@ -186,7 +188,7 @@ private
   def taxon_filter(slug)
     taxon_id = taxon_lookup[slug]
     if taxon_id.present?
-      "level_one_taxon=#{taxon_id}"
+      "filter_part_of_taxonomy_tree=#{taxon_id}"
     else
       ""
     end
