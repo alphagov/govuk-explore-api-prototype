@@ -186,7 +186,7 @@ private
   def taxon_filter(slug)
     taxon_id = taxon_lookup[slug]
     if taxon_id.present?
-      "level_one_taxon=#{taxon_id}"
+      "filter_part_of_taxonomy_tree=#{taxon_id}"
     else
       ""
     end
