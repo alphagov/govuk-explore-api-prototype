@@ -48,7 +48,10 @@ class BrowseController < ApplicationController
           title: news_result["title"],
           description: news_result["description"],
           url: news_result["_id"],
+          topic: news_result["content_purpose_supergroup"],
+          subtopic: news_result["content_purpose_subgroup"],
           image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
+          public_timestamp: news_result["public_timestamp"],
         }
       },
       organisations: topic_organisations,
@@ -86,12 +89,19 @@ class BrowseController < ApplicationController
       description: subtopic_details["description"],
       parent_url: "/browse/#{topic_slug}",
       taxon_search_filter: (taxon_filter_lookup[subtopic_slug] || ""),
-      latest_news: {
-        title: latest_news_content.first["title"],
-        description: latest_news_content.first["description"],
-        url: latest_news_content.first["_id"],
-        image_url: latest_news_content.first["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
+
+      latest_news: latest_news_content.map{ |news_result|
+        {
+          title: news_result["title"],
+          description: news_result["description"],
+          url: news_result["_id"],
+          topic: news_result["content_purpose_supergroup"],
+          subtopic: news_result["content_purpose_subgroup"],
+          image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
+          public_timestamp: news_result["public_timestamp"],
+        }
       },
+      organisations: topic_organisations,
       featured: most_popular_content([subtopic_details]),
       subtopic_sections: { items: accordion_content(subtopic_details) },
       related_topics: related_topics(subtopic_details)
@@ -222,8 +232,8 @@ private
     @topic_query ||= begin
       topic_query_params = {
         count: 5,
-        filter_content_purpose_subgroup: "news",
-        fields: %w[title description image_url],
+#        filter_content_purpose_subgroup: "news",
+        fields: %w[title description image_url public_timestamp content_purpose_supergroup content_purpose_subgroup],
         order: "-public_timestamp",
         facet_organisations: "20",
       }.merge(topic_filter(params[:subtopic_slug] || params[:slug]))
