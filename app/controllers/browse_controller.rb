@@ -172,16 +172,19 @@ private
   end
 
   def latest_news_content
-    @latest_news_content ||= begin
-      latest_news_query_params = {
+    topic_query["results"]
+  end
+
+  def topic_query
+    @topic_query ||= begin
+      topic_query_params = {
         count: 5,
         filter_content_purpose_subgroup: "news",
         fields: %w[title description image_url],
-        order: "-public_timestamp"
+        order: "-public_timestamp",
       }.merge(topic_filter(params[:subtopic_slug] || params[:slug]))
 
-      # puts "https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}"
-      latest_news_content = http_get("https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}")["results"]
+      http_get("https://www.gov.uk/api/search.json?#{topic_query_params.to_query}")
     end
   end
 
