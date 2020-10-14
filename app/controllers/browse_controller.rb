@@ -23,6 +23,7 @@ class BrowseController < ApplicationController
           image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
         }
       },
+      organisations: topic_organisations,
       featured: most_popular_content(subtopics),
       subtopics: subtopic_order.map{ |content_id|
 
@@ -172,16 +173,32 @@ private
   end
 
   def latest_news_content
-    @latest_news_content ||= begin
-      latest_news_query_params = {
+    topic_query["results"]
+  end
+
+  def topic_organisations
+    # Comes from a response looking like: https://www.gov.uk/api/search.json?facet_organisations=20&count=0
+    @topic_organisations ||= begin
+      topic_query["facets"]["organisations"]["options"].map { |org_option|
+        {
+          title: org_option["value"]["title"],
+          url: org_option["value"]["link"],
+        }
+      }
+    end
+  end
+
+  def topic_query
+    @topic_query ||= begin
+      topic_query_params = {
         count: 5,
         filter_content_purpose_subgroup: "news",
         fields: %w[title description image_url],
-        order: "-public_timestamp"
+        order: "-public_timestamp",
+        facet_organisations: "20",
       }.merge(topic_filter(params[:subtopic_slug] || params[:slug]))
 
-      # puts "https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}"
-      latest_news_content = http_get("https://www.gov.uk/api/search.json?#{latest_news_query_params.to_query}")["results"]
+      http_get("https://www.gov.uk/api/search.json?#{topic_query_params.to_query}")
     end
   end
 
