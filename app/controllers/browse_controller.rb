@@ -211,6 +211,8 @@ private
         {
           title: org_option["value"]["title"],
           url: org_option["value"]["link"],
+          crest: org_option["value"]["organisation_crest"],
+          slug: org_option["value"]["slug"],
         }
       }
     end
