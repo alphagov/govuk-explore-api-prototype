@@ -283,7 +283,7 @@ private
 
       # work jobs and pensions
 
-      "work" => "092348a4-b896-4f8f-a0dc-e6d4605a4904",
+      "working" => "092348a4-b896-4f8f-a0dc-e6d4605a4904",
       "armed-forces" => "8ff8cf05-a6e6-4757-a896-4fabd9f3229a",
       "finding-job" => "21bfd8f6-3360-43f9-be42-b00002982d70",
       "time-off" => "ebeaf804-c1b1-40cd-920f-319aa2b56ba3",
@@ -296,7 +296,7 @@ private
 
       # business and self-employed
 
-      "business-and-industry" => "495afdb6-47be-4df1-8b38-91c8adb1eefc",
+      "business" => "495afdb6-47be-4df1-8b38-91c8adb1eefc",
       # "setting-up" => "??", NO MATCH
       "business-tax" => "28262ae3-599c-4259-ae30-3c83a5ec02a1",
       "finance-support" => "ccfc50f5-e193-4dac-9d78-50b3a8bb24c5",
@@ -368,7 +368,7 @@ private
       # work jobs and pensions
 
       # Work > Working, jobs and pensions
-      "work"                        => "level_one_taxon=#{@@work}&level_two_taxon=#{@@working}",
+      "working"                     => "level_one_taxon=#{@@work}&level_two_taxon=#{@@working}",
       "armed-forces"                => "level_one_taxon=#{@@defence_and_armed_forces}&level_two_taxon=8ff8cf05-a6e6-4757-a896-4fabd9f3229a",
       "finding-job"                 => "level_one_taxon=#{@@work}&level_two_taxon=#{@@working}&level_three_taxon=21bfd8f6-3360-43f9-be42-b00002982d70",
       "time-off"                    => "level_one_taxon=#{@@work}&level_two_taxon=#{@@working}&level_three_taxon=ebeaf804-c1b1-40cd-920f-319aa2b56ba3",
@@ -382,7 +382,7 @@ private
       # business and self-employed
 
       # Business and industry
-      "business-and-industry" => "level_one_taxon=#{@@business_and_industry}",
+      "business" => "level_one_taxon=#{@@business_and_industry}",
       #  "setting-up" => "??", NO MATCH
       "business-tax"               => "level_one_taxon=#{@@money}&level_two_taxon=#{@@business_tax}",
       "finance-support"            => "level_one_taxon=#{@@business_and_industry}&level_two_taxon=#{@@running_a_business}&level_three_taxon=ccfc50f5-e193-4dac-9d78-50b3a8bb24c5",
