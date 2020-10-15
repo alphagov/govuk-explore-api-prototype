@@ -11,6 +11,7 @@ class BrowseController < ApplicationController
   @@defence_and_armed_forces="e491505c-77ae-45b2-84be-8c94b94f6a2b"
   @@childcare_parenting="206b7f3a-49b5-476f-af0f-fd27e2a68473"
   @@environment="3cf97f69-84de-41ae-bc7b-7e2cc238fa58"
+  @@going_and_being_abroad="9597c30a-605a-4e36-8bc1-47e5cdae41b3"
 
   @@personal_tax = "a5c88a77-03ba-4100-bd33-7ee2ce602dc8"
   @@business_tax = "28262ae3-599c-4259-ae30-3c83a5ec02a1"
@@ -26,14 +27,16 @@ class BrowseController < ApplicationController
   @@business_regulation="33bc0eed-62c7-4b0b-9a93-626c9e10c025"
   @@waste_and_recycling="f4e9e92d-9192-4e17-90c6-553339bc04c3"
   @@science_and_innovation="ccb77bcc-56b4-419a-b5ce-f7c2234e0546"
-
-
+  @@passports="27b9c5cd-b390-4332-89be-73491df35a41"
+  @@living_abroad="d956c72a-246d-4787-af39-00bf58b2ea66"
+  @@travel_abroad="d96e4efc-9c26-4d9b-9fa7-a036b5c11a65"
 
 
   def show
     browse_slug = params[:slug]
 
     url = "https://www.gov.uk/api/content/browse/#{browse_slug}"
+
     content_item = http_get(url).parsed_response
 
     subtopic_order = content_item["details"]["ordered_second_level_browse_pages"]
@@ -254,7 +257,7 @@ private
   def taxon_lookup
     {
       # Benefits
-      "benefits" => "dded88e2-f92e-424f-b73e-6ad24a839c51", # Welfare
+      "benefits" => @@welfare,
       "entitlement" => "536f83c0-8c67-47a3-88a4-d5b1eda591ed", # Welfare > Benefits entitlement
       "universal-credit" => "62fcbba5-3a75-4d15-85a6-d8a80b03d57c", # Welfare > Universal credit
       "tax-credits" => "a7f3005b-a3cd-4060-a127-725accb54f2e", # Welfare > Tax credits
@@ -267,7 +270,7 @@ private
 
       # Money and Tax
 
-      "tax" => "6acc9db4-780e-4a46-92b4-1812e3c2c48a",
+      "tax" => @@money,
       "capital-gains" => "3bc4ec93-fd86-4c66-98d0-7623cbbaa6be",
       "court-claims-debt-bankruptcy" => "7c4cf197-2dba-4a82-83e2-6c8bb332525c",
       "dealing-with-hmrc" => "b20215a9-25fb-4fa6-80a3-42e23f5352c2",
@@ -279,7 +282,7 @@ private
 
       # Visas and immigration
 
-      "visas-immigration" => "ba3a9702-da22-487f-86c1-8334a730e559",
+      "visas-immigration" => @@entering_staying_uk,
       # "what-you-need-to-do" => "", NO MATCH
       "eu-eea-commonwealth" => "06e2928c-57b1-4b8d-a06e-3dde9ce63a6f",
       "tourist-short-stay-visas" => "18c7918f-cde5-4e66-b5f4-cd15c33cc1cc",
@@ -293,7 +296,7 @@ private
 
       # work jobs and pensions
 
-      "working" => "092348a4-b896-4f8f-a0dc-e6d4605a4904",
+      "working" => @@working,
       "armed-forces" => "8ff8cf05-a6e6-4757-a896-4fabd9f3229a",
       "finding-job" => "21bfd8f6-3360-43f9-be42-b00002982d70",
       "time-off" => "ebeaf804-c1b1-40cd-920f-319aa2b56ba3",
@@ -306,7 +309,7 @@ private
 
       # business and self-employed
 
-      "business" => "495afdb6-47be-4df1-8b38-91c8adb1eefc",
+      "business" => @@business_and_industry,
       # "setting-up" => "??", NO MATCH
       "business-tax" => "28262ae3-599c-4259-ae30-3c83a5ec02a1",
       "finance-support" => "ccfc50f5-e193-4dac-9d78-50b3a8bb24c5",
@@ -327,7 +330,13 @@ private
       "waste-environment" => "090c16bc-7b3e-42cd-b93c-645ab43fae30",
       "science" => "429bf677-b514-4c10-8a89-c0eee4acc7ec",
       "generating-energy" => "092c86a5-717e-4bea-be43-4a5d8695a113",
-      "maritime" => "4a9ab4d7-0d03-4c61-9e16-47787cbf53cd"
+      "maritime" => "4a9ab4d7-0d03-4c61-9e16-47787cbf53cd",
+
+      # Passports, travel and living abroad
+      "abroad" => @@going_and_being_abroad,
+      "passports" => @@passports,
+      "living-abroad" => @@living_abroad,
+      "travel-abroad" => @@travel_abroad,
     }
   end
 
@@ -413,7 +422,14 @@ private
       "waste-environment"        => "level_one_taxon=#{@@environment}&level_two_taxon=#{@@waste_and_recycling}&level_three_taxon=090c16bc-7b3e-42cd-b93c-645ab43fae30",
       "science"                  => "level_one_taxon=#{@@business_and_industry}&level_two_taxon=#{@@science_and_innovation}&level_three_taxon=429bf677-b514-4c10-8a89-c0eee4acc7ec",
       "generating-energy"        => "level_one_taxon=#{@@business_and_industry}&level_two_taxon=#{@@business_regulation}&level_three_taxon=092c86a5-717e-4bea-be43-4a5d8695a113",
-      "maritime"                 => "level_one_taxon=#{@@transport}&level_two_taxon=4a9ab4d7-0d03-4c61-9e16-47787cbf53cd"
+      "maritime"                 => "level_one_taxon=#{@@transport}&level_two_taxon=4a9ab4d7-0d03-4c61-9e16-47787cbf53cd",
+
+
+      # Passports, travel and living abroad
+      "abroad" => "level_one_taxon=#{@@going_and_being_abroad}",
+      "passports" => "level_one_taxon=#{@@going_and_being_abroad}&level_two_taxon=#{@@passports}",
+      "living-abroad" => "level_one_taxon=#{@@going_and_being_abroad}&level_two_taxon=#{@@living_abroad}",
+      "travel-abroad" => "level_one_taxon=#{@@going_and_being_abroad}&level_two_taxon=#{@@travel_abroad}",
     }
   end
 
