@@ -28,12 +28,24 @@ class BrowseController < ApplicationController
     "business_regulation" => "33bc0eed-62c7-4b0b-9a93-626c9e10c025",
     "childcare_and_early_years" => "f1d9c348-5c5e-4fc6-9172-13a62537d3ae",
     "food_and_farming" => "52ff5c99-a17b-42c4-a9d7-2cc92cccca39",
-    "business_regulation" => "33bc0eed-62c7-4b0b-9a93-626c9e10c025",
     "waste_and_recycling" => "f4e9e92d-9192-4e17-90c6-553339bc04c3",
     "science_and_innovation" => "ccb77bcc-56b4-419a-b5ce-f7c2234e0546",
     "passports" => "27b9c5cd-b390-4332-89be-73491df35a41",
     "living_abroad" => "d956c72a-246d-4787-af39-00bf58b2ea66",
-    "travel_abroad" => "d96e4efc-9c26-4d9b-9fa7-a036b5c11a65"
+    "travel_abroad" => "d96e4efc-9c26-4d9b-9fa7-a036b5c11a65",
+    "benefits_entitlement" => "536f83c0-8c67-47a3-88a4-d5b1eda591ed",
+    "universal_credit" => "62fcbba5-3a75-4d15-85a6-d8a80b03d57c",
+    "tax_credits" => "a7f3005b-a3cd-4060-a127-725accb54f2e",
+    "jobseekers_allowance" => "2a1bd1b1-5025-4313-9e5b-8352dd46f1d6",
+    "carers_and_disability_benefits" => "05a9527b-e6e9-4a68-8dd7-7d84e6a24eef",
+    "child_benefit" => "7a1ba896-b85a-4137-81d9-ab05b7ce67dd",
+    "benefits_for_families" => "29dbee2a-5865-489b-860f-7eef54a5165a",
+    "heating_and_housing_benefits" => "6c4c443c-2e11-4d25-aa93-2e3a38d9499c",
+    "death_and_benefits" => "ac7b8472-5d09-4679-9551-87847b0ac827",
+
+    # Level 3
+    "capital_gains" => "43446591-3f95-443d-9fb2-56761a93106b"
+
   ]
 
 
@@ -276,7 +288,7 @@ private
       # Money and Tax
 
       "tax" => @@taxon["money"],
-      "capital-gains" => "3bc4ec93-fd86-4c66-98d0-7623cbbaa6be",
+      "capital-gains" => @@taxon["capital-gains"],
       "court-claims-debt-bankruptcy" => "7c4cf197-2dba-4a82-83e2-6c8bb332525c",
       "dealing-with-hmrc" => "b20215a9-25fb-4fa6-80a3-42e23f5352c2",
       "income-tax" => "104ee859-8278-406b-80cb-5727373e0198",
@@ -351,20 +363,20 @@ private
       # Benefits
 
       "benefits"             => "level_one_taxon=#{@@taxon["welfare"]}",
-      "entitlement"          => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=536f83c0-8c67-47a3-88a4-d5b1eda591ed",
-      "universal-credit"     => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=62fcbba5-3a75-4d15-85a6-d8a80b03d57c",
-      "tax-credits"          => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=a7f3005b-a3cd-4060-a127-725accb54f2e",
-      "jobseekers-allowance" => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=2a1bd1b1-5025-4313-9e5b-8352dd46f1d6",
-      "disability"           => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=05a9527b-e6e9-4a68-8dd7-7d84e6a24eef",
-      "child"                => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=7a1ba896-b85a-4137-81d9-ab05b7ce67dd",
-      "families"             => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=29dbee2a-5865-489b-860f-7eef54a5165a",
-      "heating"              => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=6c4c443c-2e11-4d25-aa93-2e3a38d9499c",
-      "bereavement"          => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=ac7b8472-5d09-4679-9551-87847b0ac827",
+      "entitlement"          => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=#{@@taxon["benefits_entitlement"]}",
+      "universal-credit"     => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=#{@@taxon["universal_credit"]}",
+      "tax-credits"          => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=#{@@taxon["tax_credits"]}",
+      "jobseekers-allowance" => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=#{@@taxon["jobseekers_allowance"]}",
+      "disability"           => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=#{@@taxon["carers_and_disability_benefits"]}",
+      "child"                => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=#{@@taxon["child_benefit"]}", ## One of 2 matches (other is: Parenting and childcare services > Financial help if you have children > Child Benefit)
+      "families"             => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=#{@@taxon["benefits_for_families"]}",
+      "heating"              => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=#{@@taxon["heating_and_housing_benefits"]}",
+      "bereavement"          => "level_one_taxon=#{@@taxon["welfare"]}&level_two_taxon=#{@@taxon["death_and_benefits"]}",
 
       # Money and tax
 
       "tax"                          => "level_one_taxon=#{@@taxon["money"]}",
-      "capital-gains"                => "level_one_taxon=#{@@taxon["money"]}&level_two_taxon=#{@@taxon["personal_tax"]}&level_three_taxon=3bc4ec93-fd86-4c66-98d0-7623cbbaa6be",
+      "capital-gains"                => "level_one_taxon=#{@@taxon["money"]}&level_two_taxon=#{@@taxon["personal_tax"]}&level_three_taxon=#{@@taxon["capital-gains"]}",
       "court-claims-debt-bankruptcy" => "level_one_taxon=#{@@taxon["money"]}&level_two_taxon=7c4cf197-2dba-4a82-83e2-6c8bb332525c",
       "dealing-with-hmrc"            => "level_one_taxon=#{@@taxon["money"]}&level_two_taxon=b20215a9-25fb-4fa6-80a3-42e23f5352c2",
       "income-tax"                   => "level_one_taxon=#{@@taxon["money"]}&level_two_taxon=#{@@taxon["personal_tax"]}&level_three_taxon=104ee859-8278-406b-80cb-5727373e0198",
