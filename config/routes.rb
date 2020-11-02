@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   get "/favicon.ico", to: proc { |_env| [200, {}, ["Lovely job"]] }
   get "/browse/:slug", to: "browse#show"
   get "/browse/:slug/:subtopic_slug", to: "browse#subtopic"
+  get "/topic/:slug", to: "topic#show"
+#  get "/topic/:slug/:subtopic_slug", to: "topic#subtopic"
 end
