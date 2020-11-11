@@ -1,4 +1,5 @@
 require 'httparty'
+require 'json'
 
 class TopicController < ApplicationController
 
@@ -34,30 +35,53 @@ class TopicController < ApplicationController
 
     subtopics = content_item["links"]["children"].sort_by { |k| k["title"] }
 
+    hydra = Typhoeus::Hydra.new
+
+    requests = subtopics.map {
+      | subtopic |
+      request = Typhoeus::Request.new("https://www.gov.uk/#{subtopic["api_path"]}")
+      hydra.queue request
+      request
+    }
+
+    hydra.run
 
     payload = {
       title: content_item["title"],
       description: content_item["description"],
-      subtopics: subtopics.map {
-        |subtopic| {
-          title: subtopic["title"],
-          link: subtopic["base_path"]
+      subtopics: requests.map {
+        | request |
+        subtopic_obj = JSON.parse(request.response.body)
+        {
+          title: subtopic_obj["title"],
+          link: subtopic_obj["base_path"],
+          description: subtopic_obj["description"]
         }
       }
     }
 
     render json: payload
-  end
 
   # def subtopic
   #   payload = {"a": 2}
   #   render json: payload
   # end
-end
+  end
 
 
 private
 
+  def get_subtopic_info(api_url)
+    content_item = http_get(api_url).parsed_response
+    {
+      title: content_item["title"],
+      description: content_item["description"],
+      link: content_item["base_path"]
+    }
+  end
+
   def http_get(url)
     HTTParty.get(url)
   end
+
+end
