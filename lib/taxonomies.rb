@@ -1,6 +1,6 @@
 module Taxonomies
 
-  TAXON = Hash[
+  TOPIC_TAXON_UUID = Hash[
 
     # Level 1
     "welfare" => "dded88e2-f92e-424f-b73e-6ad24a839c51",
@@ -46,10 +46,10 @@ module Taxonomies
 
   ]
 
-  TAXON2 =
+  SUBTOPIC_TAXON_UUID =
     {
       # Benefits
-      "benefits" => Taxonomies::TAXON["welfare"],
+      "benefits" => Taxonomies::TOPIC_TAXON_UUID["welfare"],
       "entitlement" => "536f83c0-8c67-47a3-88a4-d5b1eda591ed", # Welfare > Benefits entitlement
       "universal-credit" => "62fcbba5-3a75-4d15-85a6-d8a80b03d57c", # Welfare > Universal credit
       "tax-credits" => "a7f3005b-a3cd-4060-a127-725accb54f2e", # Welfare > Tax credits
@@ -62,8 +62,8 @@ module Taxonomies
 
       # Money and Tax
 
-      "tax" => Taxonomies::TAXON["money"],
-      "capital-gains" => Taxonomies::TAXON["capital-gains"],
+      "tax" => Taxonomies::TOPIC_TAXON_UUID["money"],
+      "capital-gains" => Taxonomies::TOPIC_TAXON_UUID["capital-gains"],
       "court-claims-debt-bankruptcy" => "7c4cf197-2dba-4a82-83e2-6c8bb332525c",
       "dealing-with-hmrc" => "b20215a9-25fb-4fa6-80a3-42e23f5352c2",
       "income-tax" => "104ee859-8278-406b-80cb-5727373e0198",
@@ -74,7 +74,7 @@ module Taxonomies
 
       # Visas and immigration
 
-      "visas-immigration" => Taxonomies::TAXON["entering_staying_uk"],
+      "visas-immigration" => Taxonomies::TOPIC_TAXON_UUID["entering_staying_uk"],
       # "what-you-need-to-do" => "", NO MATCH
       "eu-eea-commonwealth" => "06e2928c-57b1-4b8d-a06e-3dde9ce63a6f",
       "tourist-short-stay-visas" => "18c7918f-cde5-4e66-b5f4-cd15c33cc1cc",
@@ -88,7 +88,7 @@ module Taxonomies
 
       # work jobs and pensions
 
-      "working" => Taxonomies::TAXON["working"],
+      "working" => Taxonomies::TOPIC_TAXON_UUID["working"],
       "armed-forces" => "8ff8cf05-a6e6-4757-a896-4fabd9f3229a",
       "finding-job" => "21bfd8f6-3360-43f9-be42-b00002982d70",
       "time-off" => "ebeaf804-c1b1-40cd-920f-319aa2b56ba3",
@@ -101,7 +101,7 @@ module Taxonomies
 
       # business and self-employed
 
-      "business" => Taxonomies::TAXON["Business and industry"],
+      "business" => Taxonomies::TOPIC_TAXON_UUID["Business and industry"],
       # "setting-up" => "??", NO MATCH
       "business-tax" => "28262ae3-599c-4259-ae30-3c83a5ec02a1",
       "finance-support" => "ccfc50f5-e193-4dac-9d78-50b3a8bb24c5",
@@ -125,20 +125,18 @@ module Taxonomies
       "maritime" => "4a9ab4d7-0d03-4c61-9e16-47787cbf53cd",
 
       # Passports, travel and living abroad
-      "abroad" => Taxonomies::TAXON["going_and_being_abroad"],
-      "passports" => Taxonomies::TAXON["passports"],
-      "living-abroad" => Taxonomies::TAXON["living_abroad"],
-      "travel-abroad" => Taxonomies::TAXON["travel_abroad"],
+      "abroad" => Taxonomies::TOPIC_TAXON_UUID["going_and_being_abroad"],
+      "passports" => Taxonomies::TOPIC_TAXON_UUID["passports"],
+      "living-abroad" => Taxonomies::TOPIC_TAXON_UUID["living_abroad"],
+      "travel-abroad" => Taxonomies::TOPIC_TAXON_UUID["travel_abroad"],
     }
 
-
-
-  def Taxonomies.taxon_lookup(topic)
-    Taxonomies::TAXON[topic]
+  def Taxonomies.topic_uuid(topic)
+    Taxonomies::TOPIC_TAXON_UUID[topic]
   end
 
-  def Taxonomies.taxon_filter_lookup(topic)
-    Taxonomies::TAXON2[topic]
+  def Taxonomies.subtopic_uuid(topic)
+    Taxonomies::SUBTOPIC_TAXON_UUID[topic]
   end
 
 end

@@ -3,12 +3,10 @@ require 'taxonomies'
 
 class BrowseController < ApplicationController
 
-
-
   def show
-    browse_slug = params[:slug]
+    topic_slug = params[:slug]
 
-    url = "https://www.gov.uk/api/content/browse/#{browse_slug}"
+    url = "https://www.gov.uk/api/content/browse/#{topic_slug}"
 
     content_item = http_get(url).parsed_response
 
@@ -18,7 +16,7 @@ class BrowseController < ApplicationController
     payload = {
       title: content_item["title"],
       description: content_item["description"],
-      taxon_search_filter: (Taxonomies.taxon_filter_lookup(browse_slug) || ""),
+      taxon_search_filter: (Taxonomies.topic_uuid(topic_slug) || ""),
       latest_news: latest_news_content.map{ |news_result|
         {
           title: news_result["title"],
@@ -58,13 +56,15 @@ class BrowseController < ApplicationController
     topic_slug = params[:slug]
     subtopic_slug = params[:subtopic_slug]
 
-    subtopic_details = http_get("https://www.gov.uk/api/content/browse/#{topic_slug}/#{subtopic_slug}").parsed_response
+    url = "https://www.gov.uk/api/content/browse/#{topic_slug}/#{subtopic_slug}"
+
+    content_item = http_get(url).parsed_response
 
     payload = {
-      title: subtopic_details["title"],
-      description: subtopic_details["description"],
+      title: content_item["title"],
+      description: content_item["description"],
       parent_url: "/browse/#{topic_slug}",
-      taxon_search_filter: (Taxonomies.taxon_filter_lookup(subtopic_slug) || ""),
+      taxon_search_filter: (Taxonomies.subtopic_uuid(subtopic_slug) || ""),
 
       latest_news: latest_news_content.map{ |news_result|
         {
@@ -78,9 +78,9 @@ class BrowseController < ApplicationController
         }
       },
       organisations: topic_organisations,
-      featured: most_popular_content([subtopic_details]),
-      subtopic_sections: { items: accordion_content(subtopic_details) },
-      related_topics: related_topics(subtopic_details)
+      featured: most_popular_content([content_item]),
+      subtopic_sections: { items: accordion_content(content_item) },
+      related_topics: related_topics(content_item)
     }
 
     render json: payload
@@ -94,8 +94,8 @@ private
     }
   end
 
-  def topic_filter(browse_slug)
-    taxon_id = Taxonomies.taxon_lookup(browse_slug)
+  def topic_filter(topic_slug)
+    taxon_id = Taxonomies.topic_uuid(topic_slug)
 
     if taxon_id.present?
       { filter_part_of_taxonomy_tree: taxon_id }
@@ -219,7 +219,7 @@ private
   end
 
   def taxon_filter(slug)
-    taxon_id = Taxonomies.taxon_lookup(slug)
+    taxon_id = Taxonomies.topic_uuid(slug)
     if taxon_id.present?
       "filter_part_of_taxonomy_tree=#{taxon_id}"
     else
