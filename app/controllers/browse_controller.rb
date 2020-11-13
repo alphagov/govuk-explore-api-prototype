@@ -16,7 +16,7 @@ class BrowseController < ApplicationController
     payload = {
       title: content_item["title"],
       description: content_item["description"],
-      taxon_search_filter: (Taxonomies.topic_uuid(topic_slug) || ""),
+      taxon_search_filter: (Taxonomies.taxon_filter_lookup(topic_slug) || ""),
       latest_news: latest_news_content.map{ |news_result|
         {
           title: news_result["title"],
@@ -64,7 +64,7 @@ class BrowseController < ApplicationController
       title: content_item["title"],
       description: content_item["description"],
       parent_url: "/browse/#{topic_slug}",
-      taxon_search_filter: (Taxonomies.subtopic_uuid(subtopic_slug) || ""),
+      taxon_search_filter: (Taxonomies.taxon_filter_lookup("#{topic_slug}/#{subtopic_slug}") || ""),
 
       latest_news: latest_news_content.map{ |news_result|
         {
@@ -95,7 +95,7 @@ private
   end
 
   def topic_filter(topic_slug)
-    taxon_id = Taxonomies.topic_uuid(topic_slug)
+    taxon_id = Taxonomies.mainstream_content_id(topic_slug)
 
     if taxon_id.present?
       { filter_part_of_taxonomy_tree: taxon_id }
@@ -219,7 +219,7 @@ private
   end
 
   def taxon_filter(slug)
-    taxon_id = Taxonomies.topic_uuid(slug)
+    taxon_id = Taxonomies.taxon_lookup(slug)
     if taxon_id.present?
       "filter_part_of_taxonomy_tree=#{taxon_id}"
     else
