@@ -57,15 +57,15 @@ module Taxonomies
         "/browse/tax/vat" => ["money", "money/business-tax", "money/vat"],
 
         "/browse/benefits" => ["welfare"],
-        "/browse/benefits/entitlement" => ["welfare", "entitlement"],
-        "/browse/benefits/universal-credit" => ["welfare", "universal-credit"],
-        "/browse/benefits/tax-credits" => ["welfare", "tax-credits"],
-        "/browse/benefits/jobseekers-allowance" => ["welfare", "jobseekers-allowance"],
-        "/browse/benefits/disability" => ["welfare", "disability"],
-        "/browse/benefits/child" => ["welfare", "child-benefit"],
-        "/browse/benefits/families" => ["welfare", "families"],
-        "/browse/benefits/heating" => ["welfare", "heating"],
-        "/browse/benefits/bereavement" => ["welfare", "bereavement"]
+        "/browse/benefits/entitlement" => ["welfare", "welfare/entitlement"],
+        "/browse/benefits/universal-credit" => ["welfare", "welfare/universal-credit"],
+        "/browse/benefits/tax-credits" => ["welfare", "welfare/tax-credits"],
+        "/browse/benefits/jobseekers-allowance" => ["welfare", "welfare/jobseekers-allowance"],
+        "/browse/benefits/disability" => ["welfare", "welfare/disability"],
+        "/browse/benefits/child" => ["welfare", "welfare/child-benefit"],
+        "/browse/benefits/families" => ["welfare", "welfare/families"],
+        "/browse/benefits/heating" => ["welfare", "welfare/heating"],
+        "/browse/benefits/bereavement" => ["welfare", "welfare/bereavement"]
       }
   end
 end
