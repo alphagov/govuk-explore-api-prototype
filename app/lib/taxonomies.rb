@@ -7,10 +7,13 @@ module Taxonomies
 
     def taxon_filter_lookup(ms_topic_path)
       qsp = ["level_one_taxon=", "level_two_taxon=", "level_three_taxon=", "level_four_taxon=", "level_five_taxon=", "level_six_taxon=", "level_seven_taxon=", "level_eight_taxon=", "level_nine_taxon="]
-      taxon_path =
-        @@MAP["/browse/#{ms_topic_path}"].map(&method(:taxon_content_id))
+      taxon_path = @@MAP["/browse/#{ms_topic_path}"]
+      if taxon_path.nil?
+        return ""
+      end
+      taxon_path_uuids = taxon_path.map(&method(:taxon_content_id))
       qsp
-        .zip(taxon_path)
+        .zip(taxon_path_uuids)
         .filter { |pair| pair[1] != nil }
         .map { |z| z.flatten.join }
         .join "&"
@@ -65,7 +68,18 @@ module Taxonomies
         "/browse/benefits/child" => ["welfare", "welfare/child-benefit"],
         "/browse/benefits/families" => ["welfare", "welfare/families"],
         "/browse/benefits/heating" => ["welfare", "welfare/heating"],
-        "/browse/benefits/bereavement" => ["welfare", "welfare/bereavement"]
+        "/browse/benefits/bereavement" => ["welfare", "welfare/bereavement"],
+
+        "/browse/working" => ["/work", "/employment/working"],
+        "/browse/working/armed-forces" => ["/defence-and-armed-forces", "/defence/working-armed-forces"],
+        "/browse/working/finding-job" => ["/work", "/employment/working", "/employment/finding-job"],
+        "/browse/working/time-off"  => ["/work", "/employment/working", "/employment/time-off"],
+        "/browse/working/redundancies-dismissals"  => ["/work", "/employment/working", "/employment/redundancies-dismissals"],
+        "/browse/working/state-pension"  => ["/work", "/employment/working", "/employment/working-state-pension"],
+        "/browse/working/workplace-personal-pensions"  => ["/work", "/employment/working", "/employment/workplace-personal-pensions"],
+        "/browse/working/contract-working-hours"  => ["/work", "/employment/working", "/employment/contract-working-hours"],
+        "/browse/working/tax-minimum-wage"  => ["/work", "/employment/working", "/employment/tax-minimum-wage"],
+        "/browse/working/rights-trade-unions"  => ["/work", "/employment/working", "/employment/rights-trade-unions"]
       }
   end
 end
