@@ -5,10 +5,11 @@ module Taxonomies
 
   class << self
 
-    def taxon_filter_lookup(ms_topic_path)
+    def taxon_filter_lookup(topic_path)
       qsp = ["level_one_taxon=", "level_two_taxon=", "level_three_taxon=", "level_four_taxon=", "level_five_taxon=", "level_six_taxon=", "level_seven_taxon=", "level_eight_taxon=", "level_nine_taxon="]
-      taxon_path = @@MAP["/browse/#{ms_topic_path}"]
+      taxon_path = @@MAP[topic_path]
       if taxon_path.nil?
+        puts "Warning: topic #{topic_path} not found in taxon map"
         return ""
       end
       taxon_path_uuids = taxon_path.map(&method(:taxon_content_id))
@@ -38,6 +39,9 @@ module Taxonomies
 
     @@MAP =
       {
+
+        #### MAINSTREAM TOPICS ###########
+
         "/browse/visas-immigration" => ["entering-staying-uk"],
 #        "/browse/visas-immigration/what-you-need-to-do" => [],
         "/browse/visas-immigration/eu-eea-commonwealth" => ["entering-staying-uk", "entering-staying-uk/rights-foreign-nationals-uk", "entering-staying-uk/rights-eu-eea-citizens"],
@@ -79,7 +83,15 @@ module Taxonomies
         "/browse/working/workplace-personal-pensions"  => ["/work", "/employment/working", "/employment/workplace-personal-pensions"],
         "/browse/working/contract-working-hours"  => ["/work", "/employment/working", "/employment/contract-working-hours"],
         "/browse/working/tax-minimum-wage"  => ["/work", "/employment/working", "/employment/tax-minimum-wage"],
-        "/browse/working/rights-trade-unions"  => ["/work", "/employment/working", "/employment/rights-trade-unions"]
+        "/browse/working/rights-trade-unions"  => ["/work", "/employment/working", "/employment/rights-trade-unions"],
+
+        #### SPECIALIST TOPICS ###########
+
+        "/topic/benefits-credits" => ["welfare"],
+        "/topic/benefits-credits/child-benefit" => ["welfare", "welfare/child-benefit"], # One of 2
+        "/topic/benefits-credits/tax-credits" => ["welfare", "welfare/tax-credits"],
+        "/topic/benefits-credits/universal-credit" =>  ["welfare", "welfare/universal-credit"]
+
       }
   end
 end

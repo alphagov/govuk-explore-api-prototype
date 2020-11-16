@@ -5,5 +5,5 @@ Rails.application.routes.draw do
   get "/browse/:slug/:subtopic_slug", to: "browse#subtopic"
   get "/topic/", to: "topic#show_topics"
   get "/topic/:slug", to: "topic#show"
-#  get "/topic/:slug/:subtopic_slug", to: "topic#subtopic"
+  get "/topic/:slug/:subtopic_slug", to: "topic#subtopic"
 end

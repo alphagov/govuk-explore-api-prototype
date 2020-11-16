@@ -4,21 +4,42 @@ require 'json'
 class TopicController < ApplicationController
 
   def show
-    browse_slug = params[:slug]
+    topic_slug = params[:slug]
 
-    url = "https://www.gov.uk/api/content/topic/#{browse_slug}"
+    url = "https://www.gov.uk/api/content/topic/#{topic_slug}"
     content_item = http_get(url).parsed_response
-
-    subtopics = content_item["links"]["children"].sort_by { |k| k["title"] }
-
 
     payload = {
       title: content_item["title"],
       description: content_item["description"],
-      subtopics: subtopics.map {
-        |subtopic| {
-          title: subtopic["title"],
-          link: subtopic["base_path"]
+      taxon_search_filter: (Taxonomies.taxon_filter_lookup("/topic/#{topic_slug}") || ""),
+      subtopics: content_item["links"]["children"].map{ |sub|
+        {
+          title: sub["title"],
+          link: sub["base_path"]
+        }
+      }
+    }
+
+    render json: payload
+  end
+
+
+  def subtopic
+    topic_slug = params[:slug]
+    subtopic_slug = params[:subtopic_slug]
+
+    url = "https://www.gov.uk/api/content/topic/#{topic_slug}/#{subtopic_slug}"
+    content_item = http_get(url).parsed_response
+
+    payload = {
+      title: content_item["title"],
+      description: content_item["description"],
+      taxon_search_filter: (Taxonomies.taxon_filter_lookup("/topic/#{topic_slug}/#{subtopic_slug}") || ""),
+      subtopics: content_item["links"]["children"].map{ |sub|
+        {
+          title: sub["title"],
+          link: sub["base_path"]
         }
       }
     }

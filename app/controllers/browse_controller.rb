@@ -16,7 +16,7 @@ class BrowseController < ApplicationController
     payload = {
       title: content_item["title"],
       description: content_item["description"],
-      taxon_search_filter: (Taxonomies.taxon_filter_lookup(topic_slug) || ""),
+      taxon_search_filter: (Taxonomies.taxon_filter_lookup("/browse/#{topic_slug}") || ""),
       latest_news: latest_news_content.map{ |news_result|
         {
           title: news_result["title"],
