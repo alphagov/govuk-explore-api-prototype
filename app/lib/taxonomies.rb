@@ -46,12 +46,12 @@ module Taxonomies
 #        "/browse/visas-immigration/what-you-need-to-do" => [],
         "/browse/visas-immigration/eu-eea-commonwealth" => ["entering-staying-uk", "entering-staying-uk/rights-foreign-nationals-uk", "entering-staying-uk/rights-eu-eea-citizens"],
         "/browse/visas-immigration/tourist-short-stay-visas" => ["entering-staying-uk", "entering-staying-uk/travel-identity-documents-for-foreign-nationals"],
-        "/browse/visas-immigration/family-visas" => ["entering-staying-uk", "/entering-staying-uk/visas-entry-clearance", "entering-staying-uk/family-visas"],
+        "/browse/visas-immigration/family-visas" => ["entering-staying-uk", "entering-staying-uk/visas-entry-clearance", "entering-staying-uk/family-visas"],
         "/browse/visas-immigration/immigration-appeals" => ["entering-staying-uk", "entering-staying-uk/refugees-asylum-human-rights", "entering-staying-uk/asylum-decisions-appeals"], # one of 2
         "/browse/visas-immigration/settle-in-the-uk" => ["entering-staying-uk", "entering-staying-uk/permanent-stay-uk"],
         "/browse/visas-immigration/asylum/student-visas" => ["entering-staying-uk", "entering-staying-uk/visas-entry-clearance", "entering-staying-uk/student-visas" ],
         "/browse/visas-immigration/arriving-in-the-uk" => ["entering-staying-uk", "entering-staying-uk/travel-identity-documents-for-foreign-nationals"],
-        "/browse/visas-immigration/work-visas" => ["entering-staying-uk", "entering-staying-uk/rights-foreign-nationals-uk", "/entering-staying-uk/Foreign-nationals-working-in-UK"],
+        "/browse/visas-immigration/work-visas" => ["entering-staying-uk", "entering-staying-uk/rights-foreign-nationals-uk", "entering-staying-uk/Foreign-nationals-working-in-UK"],
 
         "/browse/tax" => ["money"],
         "/browse/tax/capital-gains" => ["money", "money/personal-tax"],
@@ -74,24 +74,26 @@ module Taxonomies
         "/browse/benefits/heating" => ["welfare", "welfare/heating"],
         "/browse/benefits/bereavement" => ["welfare", "welfare/bereavement"],
 
-        "/browse/working" => ["/work", "/employment/working"],
-        "/browse/working/armed-forces" => ["/defence-and-armed-forces", "/defence/working-armed-forces"],
-        "/browse/working/finding-job" => ["/work", "/employment/working", "/employment/finding-job"],
-        "/browse/working/time-off"  => ["/work", "/employment/working", "/employment/time-off"],
-        "/browse/working/redundancies-dismissals"  => ["/work", "/employment/working", "/employment/redundancies-dismissals"],
-        "/browse/working/state-pension"  => ["/work", "/employment/working", "/employment/working-state-pension"],
-        "/browse/working/workplace-personal-pensions"  => ["/work", "/employment/working", "/employment/workplace-personal-pensions"],
-        "/browse/working/contract-working-hours"  => ["/work", "/employment/working", "/employment/contract-working-hours"],
-        "/browse/working/tax-minimum-wage"  => ["/work", "/employment/working", "/employment/tax-minimum-wage"],
-        "/browse/working/rights-trade-unions"  => ["/work", "/employment/working", "/employment/rights-trade-unions"],
+        "/browse/working" => ["work", "employment/working"],
+        "/browse/working/armed-forces" => ["defence-and-armed-forces", "defence/working-armed-forces"],
+        "/browse/working/finding-job" => ["work", "employment/working", "employment/finding-job"],
+        "/browse/working/time-off"  => ["work", "employment/working", "employment/time-off"],
+        "/browse/working/redundancies-dismissals"  => ["work", "employment/working", "employment/redundancies-dismissals"],
+        "/browse/working/state-pension"  => ["work", "employment/working", "employment/working-state-pension"],
+        "/browse/working/workplace-personal-pensions"  => ["work", "employment/working", "employment/workplace-personal-pensions"],
+        "/browse/working/contract-working-hours"  => ["work", "employment/working", "employment/contract-working-hours"],
+        "/browse/working/tax-minimum-wage"  => ["work", "employment/working", "employment/tax-minimum-wage"],
+        "/browse/working/rights-trade-unions"  => ["work", "employment/working", "employment/rights-trade-unions"],
 
         #### SPECIALIST TOPICS ###########
 
         "/topic/benefits-credits" => ["welfare"],
         "/topic/benefits-credits/child-benefit" => ["welfare", "welfare/child-benefit"], # One of 2
         "/topic/benefits-credits/tax-credits" => ["welfare", "welfare/tax-credits"],
-        "/topic/benefits-credits/universal-credit" =>  ["welfare", "welfare/universal-credit"]
+        "/topic/benefits-credits/universal-credit" =>  ["welfare", "welfare/universal-credit"],
 
+        "/topic/animal-welfare" => ["environment", "environment/wildlife-animals-biodiversity-and-ecosystems", "environment/animal-welfare"], # TBC
+        "/topic/animal-welfare/pets" => ["environment", "environment/wildlife-animals-biodiversity-and-ecosystems", "environment/pets"]
       }
   end
 end
