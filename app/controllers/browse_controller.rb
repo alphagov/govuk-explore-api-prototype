@@ -57,12 +57,16 @@ class BrowseController < ApplicationController
     subtopic_slug = params[:subtopic_slug]
 
     url = "https://www.gov.uk/api/content/browse/#{topic_slug}/#{subtopic_slug}"
-
     content_item = http_get(url).parsed_response
 
     payload = {
       title: content_item["title"],
       description: content_item["description"],
+      parent:
+        {
+          link: content_item["links"]["parent"][0]["base_path"],
+          title: content_item["links"]["parent"][0]["title"]
+        },
       parent_url: "/browse/#{topic_slug}",
       taxon_search_filter: (Taxonomies.taxon_filter_lookup("#{topic_slug}/#{subtopic_slug}") || ""),
 
