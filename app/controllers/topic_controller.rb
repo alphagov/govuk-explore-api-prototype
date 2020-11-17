@@ -41,7 +41,12 @@ class TopicController < ApplicationController
           title: sub["title"],
           link: sub["base_path"]
         }
-      }
+      },
+      parent:
+        {
+          link: content_item["links"]["parent"][0]["base_path"],
+          title: content_item["links"]["parent"][0]["title"]
+        }
     }
 
     render json: payload
