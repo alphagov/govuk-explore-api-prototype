@@ -3,53 +3,12 @@ require 'taxonomies'
 
 class BrowseController < ApplicationController
 
-  def show
-    topic_slug = params[:slug]
+  def show_mainstream_topic
+    topic(params[:topic_slug], :mainstream)
+  end
 
-    url = "https://www.gov.uk/api/content/browse/#{topic_slug}"
-
-    content_item = http_get(url).parsed_response
-
-    subtopic_order = content_item["details"]["ordered_second_level_browse_pages"]
-    subtopics = content_item["links"]["second_level_browse_pages"]
-
-    payload = {
-      title: content_item["title"],
-      description: content_item["description"],
-      taxon_search_filter: (Taxonomies.taxon_filter_lookup("/browse/#{topic_slug}") || ""),
-      latest_news: latest_news_content.map{ |news_result|
-        {
-          title: news_result["title"],
-          description: news_result["description"],
-          url: news_result["_id"],
-          topic: news_result["content_purpose_supergroup"],
-          subtopic: news_result["content_purpose_subgroup"],
-          image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
-          public_timestamp: news_result["public_timestamp"],
-        }
-      },
-      organisations: topic_organisations,
-      featured: most_popular_content(subtopics),
-      subtopics: subtopic_order.map{ |content_id|
-
-        subtopic = subtopics.detect{|s| s["content_id"] == content_id }
-        next if subtopic.nil?
-
-        subtopic_details = http_get(subtopic["api_url"]).parsed_response
-
-        content =  accordion_content(subtopic_details)
-
-        {
-          title: subtopic["title"],
-          link: subtopic["base_path"],
-          subtopic_sections: {
-            items: content
-          }
-        }
-      }.compact
-    }
-
-    render json: payload
+  def show_specialist_topic
+    topic(params[:topic_slug], :specialist)
   end
 
   def subtopic
@@ -90,6 +49,63 @@ class BrowseController < ApplicationController
   end
 
 private
+
+
+  def topic(topic_slug, topic_type)
+    topic_slug = params[:slug]
+
+    if topic_type == :mainstream
+      url = "https://www.gov.uk/api/content/browse/#{topic_slug}"
+      content_item = http_get(url).parsed_response
+      subtopic_order = content_item["details"]["ordered_second_level_browse_pages"]
+      subtopics = content_item["links"]["second_level_browse_pages"]
+      taxon_search_filter = (Taxonomies.taxon_filter_lookup("/browse/#{topic_slug}") || "")
+      subs = subtopic_order.map{ |content_id|
+        subtopic = subtopics.detect{|s| s["content_id"] == content_id }
+        next if subtopic.nil?
+        subtopic_details = http_get(subtopic["api_url"]).parsed_response
+        content =  accordion_content(subtopic_details)
+        {
+          title: subtopic["title"],
+          link: subtopic["base_path"],
+          subtopic_sections: {
+            items: content
+          }
+        }
+      }.compact
+
+    else
+      url = "https://www.gov.uk/api/content/topic/#{topic_slug}"
+      content_item = http_get(url).parsed_response
+      subtopics = content_item["links"]["children"]
+      taxon_search_filter = (Taxonomies.taxon_filter_lookup("/topic/#{topic_slug}") || "")
+      subs = subtopics
+    end
+
+    payload = {
+      title: content_item["title"],
+      description: content_item["description"],
+      taxon_search_filter: taxon_search_filter,
+      latest_news: latest_news_content.map{ |news_result|
+        {
+          title: news_result["title"],
+          description: news_result["description"],
+          url: news_result["_id"],
+          topic: news_result["content_purpose_supergroup"],
+          subtopic: news_result["content_purpose_subgroup"],
+          image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
+          public_timestamp: news_result["public_timestamp"],
+        }
+      },
+      organisations: topic_organisations,
+      featured: most_popular_content(subtopics, topic_type),
+      subtopics: subs
+    }
+
+    render json: payload
+  end
+
+
 
   def related_topics(subtopic_details)
     (subtopic_details["links"]["second_level_browse_pages"] || []).map { |topic|
@@ -164,29 +180,32 @@ private
         fields: "title",
         order: "title",
       }
-      # puts "https://www.gov.uk/api/search.json?#{browse_content_query_params.to_query}"
       results = http_get("https://www.gov.uk/api/search.json?#{browse_content_query_params.to_query}")["results"]
       results.map { |result| { title: result["title"].strip, link: result["_id"] } }
     end
   end
 
-  def most_popular_content_results(subtopics)
+  def most_popular_content_results(subtopics, topic_type)
     most_popular_content ||= begin
       popular_content_query_params = {
         count: 3,
-        filter_mainstream_browse_pages: subtopics.map { |subtopic| subtopic["base_path"].sub("/browse/", "") },
         fields: "title"
       }
+      if topic_type == :mainstream
+        popular_content_query_params["filter_mainstream_browse_pages"] =
+          subtopics.map { |subtopic| subtopic["base_path"].sub("/browse/", "") }
+      else
+        popular_content_query_params["filter_specialist_sectors"] =
+          subtopics.map { |subtopic| subtopic["base_path"].sub("/topic/", "") }
+      end
+
+      puts "https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}"
       http_get("https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}")["results"]
     end
   end
 
-  def most_popular_content(subtopics)
-    content = most_popular_content_results(subtopics).map { |popular| { title: popular["title"], link: popular["_id"] } }
-    if params[:slug] == "benefits"
-      content[1] = { title: "Benefits: report a change in your circumstances", link: "/report-benefits-change-circumstances" }
-    end
-    content
+  def most_popular_content(subtopics, topic_type)
+    most_popular_content_results(subtopics, topic_type).map { |popular| { title: popular["title"], link: popular["_id"] } }
   end
 
   def latest_news_content
