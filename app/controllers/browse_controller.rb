@@ -39,12 +39,11 @@ class BrowseController < ApplicationController
           public_timestamp: news_result["public_timestamp"],
         }
       },
-      organisations: topic_organisations,
+      organisations: topic_organisations(topic_type),
       featured: most_popular_content([content_item]),
       subtopic_sections: { items: accordion_content(content_item) },
       related_topics: related_topics(content_item)
     }
-
     render json: payload
   end
 
@@ -63,30 +62,24 @@ private
       subs = subtopic_order.map{ |content_id|
         subtopic = subtopics.detect{|s| s["content_id"] == content_id }
         next if subtopic.nil?
-        subtopic_details = http_get(subtopic["api_url"]).parsed_response
-        content =  accordion_content(subtopic_details)
         {
           title: subtopic["title"],
-          link: subtopic["base_path"],
-          subtopic_sections: {
-            items: content
-          }
+          link: subtopic["base_path"]
         }
       }.compact
-
     else
       url = "https://www.gov.uk/api/content/topic/#{topic_slug}"
       content_item = http_get(url).parsed_response
       subtopics = content_item["links"]["children"]
       taxon_search_filter = (Taxonomies.taxon_filter_lookup("/topic/#{topic_slug}") || "")
-      subs = subtopics
+      subs = subtopics.map { |sub| { title: sub["title"], link: sub["base_path"] } }
     end
 
     payload = {
       title: content_item["title"],
       description: content_item["description"],
       taxon_search_filter: taxon_search_filter,
-      latest_news: latest_news_content.map{ |news_result|
+      latest_news: latest_news_content(topic_type).map{ |news_result|
         {
           title: news_result["title"],
           description: news_result["description"],
@@ -97,7 +90,7 @@ private
           public_timestamp: news_result["public_timestamp"],
         }
       },
-      organisations: topic_organisations,
+      organisations: topic_organisations(topic_type),
       featured: most_popular_content(subtopics, topic_type),
       subtopics: subs
     }
@@ -113,9 +106,8 @@ private
     }
   end
 
-  def topic_filter(topic_slug)
-    taxon_id = Taxonomies.mainstream_content_id(topic_slug)
-
+  def topic_filter(topic_slug, topic_type)
+    taxon_id = Taxonomies.content_id(topic_slug, topic_type)
     if taxon_id.present?
       { filter_part_of_taxonomy_tree: taxon_id }
     else
@@ -198,8 +190,6 @@ private
         popular_content_query_params["filter_specialist_sectors"] =
           subtopics.map { |subtopic| subtopic["base_path"].sub("/topic/", "") }
       end
-
-      puts "https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}"
       http_get("https://www.gov.uk/api/search.json?#{popular_content_query_params.to_query}")["results"]
     end
   end
@@ -208,14 +198,14 @@ private
     most_popular_content_results(subtopics, topic_type).map { |popular| { title: popular["title"], link: popular["_id"] } }
   end
 
-  def latest_news_content
-    topic_query["results"]
+  def latest_news_content(topic_type)
+    topic_query(topic_type)["results"]
   end
 
-  def topic_organisations
+  def topic_organisations(topic_type)
     # Comes from a response looking like: https://www.gov.uk/api/search.json?facet_organisations=20&count=0
     @topic_organisations ||= begin
-      topic_query["facets"]["organisations"]["options"].map { |org_option|
+      topic_query(topic_type)["facets"]["organisations"]["options"].map { |org_option|
         {
           title: org_option["value"]["title"],
           url: org_option["value"]["link"],
@@ -226,7 +216,7 @@ private
     end
   end
 
-  def topic_query
+  def topic_query(topic_type)
     @topic_query ||= begin
       topic_query_params = {
         count: 5,
@@ -234,8 +224,7 @@ private
         fields: %w[title description image_url public_timestamp content_purpose_supergroup content_purpose_subgroup],
         order: "-public_timestamp",
         facet_organisations: "20",
-      }.merge(topic_filter(params[:subtopic_slug] || params[:slug]))
-
+      }.merge(topic_filter(params[:subtopic_slug] || params[:slug], topic_type))
       http_get("https://www.gov.uk/api/search.json?#{topic_query_params.to_query}")
     end
   end
@@ -248,6 +237,7 @@ private
       ""
     end
   end
+
   def http_get(url)
     HTTParty.get(url)
   end

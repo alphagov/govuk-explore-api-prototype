@@ -20,9 +20,9 @@ module Taxonomies
         .join "&"
     end
 
-    def mainstream_content_id(topic_path)
-      results = http_get("https://www.gov.uk/api/content/browse/#{topic_path}");
-      results["content_id"]
+    def content_id(topic_path, topic_type)
+      prefix = topic_type == :mainstream ? "browse" : "topic"
+      taxon_content_id(@@MAP["/#{prefix}/#{topic_path}"].last)
     end
 
     private
