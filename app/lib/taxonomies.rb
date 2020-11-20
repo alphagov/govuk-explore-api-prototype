@@ -7,12 +7,25 @@ module Taxonomies
 
     def taxon_filter_lookup(topic_path)
       qsp = ["level_one_taxon=", "level_two_taxon=", "level_three_taxon=", "level_four_taxon=", "level_five_taxon=", "level_six_taxon=", "level_seven_taxon=", "level_eight_taxon=", "level_nine_taxon="]
-      taxon_path = @@MAP[topic_path]
-      if taxon_path.nil?
+
+      taxon_path_uuids = []
+
+      taxon = @@MAP[topic_path]
+      if taxon.nil?
         puts "Warning: topic #{topic_path} not found in taxon map"
         return ""
       end
-      taxon_path_uuids = taxon_path.map(&method(:taxon_content_id))
+
+      while true
+        results = http_get("https://www.gov.uk/api/content/#{taxon}")
+        taxon_path_uuids.insert(0, results["content_id"])
+        parent_taxons = results["links"]["parent_taxons"]
+        if parent_taxons.nil?
+          break
+        end
+        taxon = parent_taxons[0]["base_path"]
+      end
+
       qsp
         .zip(taxon_path_uuids)
         .filter { |pair| pair[1] != nil }
@@ -22,7 +35,7 @@ module Taxonomies
 
     def content_id(topic_path, topic_type)
       prefix = topic_type == :mainstream ? "browse" : "topic"
-      taxon_content_id(@@MAP["/#{prefix}/#{topic_path}"].last)
+      taxon_content_id(@@MAP["/#{prefix}/#{topic_path}"])
     end
 
     private
@@ -42,125 +55,68 @@ module Taxonomies
 
         #### MAINSTREAM TOPICS ###########
 
-        "/browse/visas-immigration" => ["entering-staying-uk"],
-#        "/browse/visas-immigration/what-you-need-to-do" => [],
-        "/browse/visas-immigration/eu-eea-commonwealth" => ["entering-staying-uk", "entering-staying-uk/rights-foreign-nationals-uk", "entering-staying-uk/rights-eu-eea-citizens"],
-        "/browse/visas-immigration/tourist-short-stay-visas" => ["entering-staying-uk", "entering-staying-uk/travel-identity-documents-for-foreign-nationals"],
-        "/browse/visas-immigration/family-visas" => ["entering-staying-uk", "entering-staying-uk/visas-entry-clearance", "entering-staying-uk/family-visas"],
-        "/browse/visas-immigration/immigration-appeals" => ["entering-staying-uk", "entering-staying-uk/refugees-asylum-human-rights", "entering-staying-uk/asylum-decisions-appeals"], # one of 2
-        "/browse/visas-immigration/settle-in-the-uk" => ["entering-staying-uk", "entering-staying-uk/permanent-stay-uk"],
-        "/browse/visas-immigration/asylum/student-visas" => ["entering-staying-uk", "entering-staying-uk/visas-entry-clearance", "entering-staying-uk/student-visas" ],
-        "/browse/visas-immigration/arriving-in-the-uk" => ["entering-staying-uk", "entering-staying-uk/travel-identity-documents-for-foreign-nationals"],
-        "/browse/visas-immigration/work-visas" => ["entering-staying-uk", "entering-staying-uk/rights-foreign-nationals-uk", "entering-staying-uk/Foreign-nationals-working-in-UK"],
+        "/browse/visas-immigration" => "entering-staying-uk",
+#        "/browse/visas-immigration/what-you-need-to-do" => "",
+        "/browse/visas-immigration/eu-eea-commonwealth" => "entering-staying-uk/rights-eu-eea-citizens",
+        "/browse/visas-immigration/tourist-short-stay-visas" =>  "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
+        "/browse/visas-immigration/family-visas" =>  "entering-staying-uk/family-visas",
+        "/browse/visas-immigration/immigration-appeals" =>  "entering-staying-uk/asylum-decisions-appeals", # one of 2
+        "/browse/visas-immigration/settle-in-the-uk" =>  "entering-staying-uk/permanent-stay-uk",
+        "/browse/visas-immigration/asylum/student-visas" =>  "entering-staying-uk/student-visas" ,
+        "/browse/visas-immigration/arriving-in-the-uk" =>  "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
+        "/browse/visas-immigration/work-visas" => "entering-staying-uk/Foreign-nationals-working-in-UK",
 
-        "/browse/tax" => ["money"],
-        "/browse/tax/capital-gains" => ["money", "money/personal-tax"],
-        "/browse/tax/court-claims-debt-bankruptcy" => ["money", "money/court-claims-debt-bankruptcy"],
-        "/browse/tax/dealing-with-hmrc" => ["money", "money/dealing-with-hmrc"],
-        "/browse/tax/income-tax" => ["money", "money/personal-tax", "money/personal-tax/income-tax" ],
-        "/browse/tax/inheritance-tax" => ["money", "money/personal-tax-inheritance-tax"],
-        "/browse/tax/national-insurance" => ["money", "money/personal-tax", "money/national-insurance"],
-        "/browse/tax/self-assessment" => ["money", "money/personal-tax", "money/self-assessment"],
-        "/browse/tax/vat" => ["money", "money/business-tax", "money/vat"],
+        "/browse/tax" => "money",
+        "/browse/tax/capital-gains" => "money/personal-tax",
+        "/browse/tax/court-claims-debt-bankruptcy" =>  "money/court-claims-debt-bankruptcy",
+        "/browse/tax/dealing-with-hmrc" =>  "money/dealing-with-hmrc",
+        "/browse/tax/income-tax" =>  "money/personal-tax/income-tax" ,
+        "/browse/tax/inheritance-tax" =>  "money/personal-tax-inheritance-tax",
+        "/browse/tax/national-insurance" =>  "money/national-insurance",
+        "/browse/tax/self-assessment" =>  "money/self-assessment",
+        "/browse/tax/vat" => "money/vat",
 
-        "/browse/benefits" => ["welfare"],
-        "/browse/benefits/entitlement" => ["welfare", "welfare/entitlement"],
-        "/browse/benefits/universal-credit" => ["welfare", "welfare/universal-credit"],
-        "/browse/benefits/tax-credits" => ["welfare", "welfare/tax-credits"],
-        "/browse/benefits/jobseekers-allowance" => ["welfare", "welfare/jobseekers-allowance"],
-        "/browse/benefits/disability" => ["welfare", "welfare/disability"],
-        "/browse/benefits/child" => ["welfare", "welfare/child-benefit"],
-        "/browse/benefits/families" => ["welfare", "welfare/families"],
-        "/browse/benefits/heating" => ["welfare", "welfare/heating"],
-        "/browse/benefits/bereavement" => ["welfare", "welfare/bereavement"],
+        "/browse/benefits" => "welfare",
+        "/browse/benefits/entitlement" =>  "welfare/entitlement",
+        "/browse/benefits/universal-credit" =>  "welfare/universal-credit",
+        "/browse/benefits/tax-credits" =>  "welfare/tax-credits",
+        "/browse/benefits/jobseekers-allowance" =>  "welfare/jobseekers-allowance",
+        "/browse/benefits/disability" =>  "welfare/disability",
+        "/browse/benefits/child" =>  "welfare/child-benefit",
+        "/browse/benefits/families" =>  "welfare/families",
+        "/browse/benefits/heating" =>  "welfare/heating",
+        "/browse/benefits/bereavement" =>  "welfare/bereavement",
 
-        "/browse/working" => ["work", "employment/working"],
-        "/browse/working/armed-forces" => ["defence-and-armed-forces", "defence/working-armed-forces"],
-        "/browse/working/finding-job" => ["work", "employment/working", "employment/finding-job"],
-        "/browse/working/time-off"  => ["work", "employment/working", "employment/time-off"],
-        "/browse/working/redundancies-dismissals"  => ["work", "employment/working", "employment/redundancies-dismissals"],
-        "/browse/working/state-pension"  => ["work", "employment/working", "employment/working-state-pension"],
-        "/browse/working/workplace-personal-pensions"  => ["work", "employment/working", "employment/workplace-personal-pensions"],
-        "/browse/working/contract-working-hours"  => ["work", "employment/working", "employment/contract-working-hours"],
-        "/browse/working/tax-minimum-wage"  => ["work", "employment/working", "employment/tax-minimum-wage"],
-        "/browse/working/rights-trade-unions"  => ["work", "employment/working", "employment/rights-trade-unions"],
+        "/browse/working" =>  "employment/working",
+        "/browse/working/armed-forces" =>  "defence/working-armed-forces",
+        "/browse/working/finding-job" =>  "employment/finding-job",
+        "/browse/working/time-off"  =>  "employment/time-off",
+        "/browse/working/redundancies-dismissals"  =>  "employment/redundancies-dismissals",
+        "/browse/working/state-pension"  =>  "employment/working-state-pension",
+        "/browse/working/workplace-personal-pensions"  =>  "employment/workplace-personal-pensions",
+        "/browse/working/contract-working-hours"  =>  "employment/contract-working-hours",
+        "/browse/working/tax-minimum-wage"  =>  "employment/tax-minimum-wage",
+        "/browse/working/rights-trade-unions"  =>  "employment/rights-trade-unions",
 
         #### SPECIALIST TOPICS ###########
 
-        "/topic/animal-welfare" => [
-          "environment",
-          "environment/wildlife-animals-biodiversity-and-ecosystems",
-          "environment/animal-welfare"
-        ], # TBC
-        "/topic/animal-welfare/pets" => [
-          "environment",
-          "environment/wildlife-animals-biodiversity-and-ecosystems",
-          "environment/pets"
-        ],
+        "/topic/animal-welfare" => "environment/animal-welfare", # TBC
+        "/topic/animal-welfare/pets" => "environment/pets",
 
-        "/topic/benefits-credits" => ["welfare"],
-        "/topic/benefits-credits/child-benefit" => [
-          "welfare",
-          "welfare/child-benefit"
-        ], # One of 2
-        "/topic/benefits-credits/tax-credits" => [
-          "welfare",
-          "welfare/tax-credits"
-        ],
-        "/topic/benefits-credits/universal-credit" =>  [
-          "welfare",
-          "welfare/universal-credit"
-        ],
+        "/topic/benefits-credits" => "welfare",
+        "/topic/benefits-credits/child-benefit" => "welfare/child-benefit",
+        "/topic/benefits-credits/tax-credits" => "welfare/tax-credits",
+        "/topic/benefits-credits/universal-credit" => "welfare/universal-credit",
 
-        "/topic/business-enterprise" => [
-          "business-and-industry"
-        ],
-        "/topic/business-enterprise/business-auditing-accounting-reporting" => [
-          "business-and-industry",
-          "business-and-industry/running-a-business",
-          "/business-and-industry/business-auditing-accounting-reporting"
-        ],
-        "/topic/business-enterprise/european-regional-development-funding" => [
-          "business-and-industry",
-          "business-and-industry/uk-economy",
-          "business/uk-economic-growth",
-          "business/management-of-the-european-regional-development-fund"
-        ],
-        "/topic/business-enterprise/export-finance" => [
-          "business-and-industry",
-          "business-and-industry/trade-and-investment",
-          "business-and-industry/exporting",
-          "business-and-industry/export-finance"
-        ],
-        "/topic/business-enterprise/farming" => [
-          "environment",
-          "environment/food-and-farming",
-          "environment/food-and-farming-industry"
-        ],
-
-        "/topic/business-enterprise/licensing" => [
-          "business-and-industry",
-          "business-and-industry/running-a-business",
-          "business-and-industry/business-and-industry/business-licensing"
-        ],
-
-        "/topic/business-enterprise/manufacturing" => [
-          "business-and-industry",
-          "business-and-industry/manufacturing"
-        ],
-
-        "/topic/business-enterprise/scientific-research-and-development" => [
-          "business-and-industry",
-          "business-and-industry/science-and-innovation",
-          "business-and-industry/scientific-research-and-development",
-        ],
-
-        "/topic/business-enterprise/importing-exporting" => [
-          "business-and-industry",
-          "business-and-industry/trade-and-investment",
-          "business-and-industry/exporting",
-          "business-and-industry/trade-restrictions-on-exports"
-        ]
+        "/topic/business-enterprise" => "business-and-industry",
+        "/topic/business-enterprise/business-auditing-accounting-reporting" => "/business-and-industry/business-auditing-accounting-reporting",
+        "/topic/business-enterprise/european-regional-development-funding" => "business/management-of-the-european-regional-development-fund",
+        "/topic/business-enterprise/export-finance" => "business-and-industry/export-finance",
+        "/topic/business-enterprise/farming" => "environment",
+        "/topic/business-enterprise/licensing" => "business-and-industry/business-and-industry/business-licensing",
+        "/topic/business-enterprise/manufacturing" => "business-and-industry/manufacturing",
+        "/topic/business-enterprise/scientific-research-and-development" => "business-and-industry/scientific-research-and-development",
+        "/topic/business-enterprise/importing-exporting" => "business-and-industry/trade-restrictions-on-exports"
       }
   end
 end
