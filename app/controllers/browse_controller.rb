@@ -11,53 +11,21 @@ class BrowseController < ApplicationController
     topic(params[:topic_slug], :specialist)
   end
 
-  def subtopic
-    topic_slug = params[:slug]
-    subtopic_slug = params[:subtopic_slug]
-
-    url = "https://www.gov.uk/api/content/browse/#{topic_slug}/#{subtopic_slug}"
-    content_item = http_get(url).parsed_response
-
-    payload = {
-      title: content_item["title"],
-      description: content_item["description"],
-      parent:
-        {
-          link: content_item["links"]["parent"][0]["base_path"],
-          title: content_item["links"]["parent"][0]["title"]
-        },
-      taxon_search_filter: (Taxonomies.taxon_filter_lookup("#{topic_slug}/#{subtopic_slug}") || ""),
-
-      latest_news: latest_news_content.map{ |news_result|
-        {
-          title: news_result["title"],
-          description: news_result["description"],
-          url: news_result["_id"],
-          topic: news_result["content_purpose_supergroup"],
-          subtopic: news_result["content_purpose_subgroup"],
-          image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
-          public_timestamp: news_result["public_timestamp"],
-        }
-      },
-      organisations: topic_organisations(topic_type),
-      featured: most_popular_content([content_item]),
-      subtopic_sections: { items: accordion_content(content_item) },
-      related_topics: related_topics(content_item)
-    }
-    render json: payload
+  def show_mainstream_subtopic
+    subtopic(params[:topic_slug], params[:subtopic_slug], :mainstream)
   end
+
 
 private
 
 
   def topic(topic_slug, topic_type)
-    topic_slug = params[:slug]
-
     if topic_type == :mainstream
       url = "https://www.gov.uk/api/content/browse/#{topic_slug}"
       content_item = http_get(url).parsed_response
       subtopic_order = content_item["details"]["ordered_second_level_browse_pages"]
       subtopics = content_item["links"]["second_level_browse_pages"]
+
       taxon_search_filter = (Taxonomies.taxon_filter_lookup("/browse/#{topic_slug}") || "")
       subs = subtopic_order.map{ |content_id|
         subtopic = subtopics.detect{|s| s["content_id"] == content_id }
@@ -98,6 +66,41 @@ private
     render json: payload
   end
 
+  def subtopic(topic_slug, subtopic_slug, topic_type)
+
+    topic_prefix = topic_type == :mainstream ? "browse" : "topic"
+
+    url = "https://www.gov.uk/api/content/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}"
+    content_item = http_get(url).parsed_response
+
+    payload = {
+      title: content_item["title"],
+      description: content_item["description"],
+#      parent:
+#        {
+#          link: content_item["links"]["parent"][0]["base_path"],
+#          title: content_item["links"]["parent"][0]["title"]
+#        },
+      taxon_search_filter: (Taxonomies.taxon_filter_lookup("/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}") || ""),
+
+      # latest_news: latest_news_content(topic_type).map{ |news_result|
+      #   {
+      #     title: news_result["title"],
+      #     description: news_result["description"],
+      #     url: news_result["_id"],
+      #     topic: news_result["content_purpose_supergroup"],
+      #     subtopic: news_result["content_purpose_subgroup"],
+      #     image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
+      #     public_timestamp: news_result["public_timestamp"],
+      #   }
+      # },
+      # organisations: topic_organisations(topic_type),
+      # featured: most_popular_content([content_item]),
+      # subtopic_sections: { items: accordion_content(content_item) },
+      # related_topics: related_topics(content_item)
+    }
+    render json: payload
+  end
 
 
   def related_topics(subtopic_details)
@@ -224,7 +227,7 @@ private
         fields: %w[title description image_url public_timestamp content_purpose_supergroup content_purpose_subgroup],
         order: "-public_timestamp",
         facet_organisations: "20",
-      }.merge(topic_filter(params[:subtopic_slug] || params[:slug], topic_type))
+      }.merge(topic_filter(params[:subtopic_slug] || params[:topic_slug], topic_type))
       http_get("https://www.gov.uk/api/search.json?#{topic_query_params.to_query}")
     end
   end
