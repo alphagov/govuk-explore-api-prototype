@@ -87,15 +87,34 @@ module Taxonomies
 
         #### SPECIALIST TOPICS ###########
 
+        "/topic/animal-welfare" => [
+          "environment",
+          "environment/wildlife-animals-biodiversity-and-ecosystems",
+          "environment/animal-welfare"
+        ], # TBC
+        "/topic/animal-welfare/pets" => [
+          "environment",
+          "environment/wildlife-animals-biodiversity-and-ecosystems",
+          "environment/pets"
+        ],
+
         "/topic/benefits-credits" => ["welfare"],
-        "/topic/benefits-credits/child-benefit" => ["welfare", "welfare/child-benefit"], # One of 2
-        "/topic/benefits-credits/tax-credits" => ["welfare", "welfare/tax-credits"],
-        "/topic/benefits-credits/universal-credit" =>  ["welfare", "welfare/universal-credit"],
+        "/topic/benefits-credits/child-benefit" => [
+          "welfare",
+          "welfare/child-benefit"
+        ], # One of 2
+        "/topic/benefits-credits/tax-credits" => [
+          "welfare",
+          "welfare/tax-credits"
+        ],
+        "/topic/benefits-credits/universal-credit" =>  [
+          "welfare",
+          "welfare/universal-credit"
+        ],
 
-        "/topic/animal-welfare" => ["environment", "environment/wildlife-animals-biodiversity-and-ecosystems", "environment/animal-welfare"], # TBC
-        "/topic/animal-welfare/pets" => ["environment", "environment/wildlife-animals-biodiversity-and-ecosystems", "environment/pets"],
-
-        "/topic/business-enterprise" => ["business-and-industry"],
+        "/topic/business-enterprise" => [
+          "business-and-industry"
+        ],
         "/topic/business-enterprise/business-auditing-accounting-reporting" => [
           "business-and-industry",
           "business-and-industry/running-a-business",
