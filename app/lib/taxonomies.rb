@@ -93,7 +93,55 @@ module Taxonomies
         "/topic/benefits-credits/universal-credit" =>  ["welfare", "welfare/universal-credit"],
 
         "/topic/animal-welfare" => ["environment", "environment/wildlife-animals-biodiversity-and-ecosystems", "environment/animal-welfare"], # TBC
-        "/topic/animal-welfare/pets" => ["environment", "environment/wildlife-animals-biodiversity-and-ecosystems", "environment/pets"]
+        "/topic/animal-welfare/pets" => ["environment", "environment/wildlife-animals-biodiversity-and-ecosystems", "environment/pets"],
+
+        "/topic/business-enterprise" => ["business-and-industry"],
+        "/topic/business-enterprise/business-auditing-accounting-reporting" => [
+          "business-and-industry",
+          "business-and-industry/running-a-business",
+          "/business-and-industry/business-auditing-accounting-reporting"
+        ],
+        "/topic/business-enterprise/european-regional-development-funding" => [
+          "business-and-industry",
+          "business-and-industry/uk-economy",
+          "business/uk-economic-growth",
+          "business/management-of-the-european-regional-development-fund"
+        ],
+        "/topic/business-enterprise/export-finance" => [
+          "business-and-industry",
+          "business-and-industry/trade-and-investment",
+          "business-and-industry/exporting",
+          "business-and-industry/export-finance"
+        ],
+        "/topic/business-enterprise/farming" => [
+          "environment",
+          "environment/food-and-farming",
+          "environment/food-and-farming-industry"
+        ],
+
+        "/topic/business-enterprise/licensing" => [
+          "business-and-industry",
+          "business-and-industry/running-a-business",
+          "business-and-industry/business-and-industry/business-licensing"
+        ],
+
+        "/topic/business-enterprise/manufacturing" => [
+          "business-and-industry",
+          "business-and-industry/manufacturing"
+        ],
+
+        "/topic/business-enterprise/scientific-research-and-development" => [
+          "business-and-industry",
+          "business-and-industry/science-and-innovation",
+          "business-and-industry/scientific-research-and-development",
+        ],
+
+        "/topic/business-enterprise/importing-exporting" => [
+          "business-and-industry",
+          "business-and-industry/trade-and-investment",
+          "business-and-industry/exporting",
+          "business-and-industry/trade-restrictions-on-exports"
+        ]
       }
   end
 end
