@@ -7,12 +7,34 @@ class BrowseController < ApplicationController
     topic(params[:topic_slug], :mainstream)
   end
 
+  def show_mainstream_subtopic
+    subtopic(params[:topic_slug], params[:subtopic_slug], :mainstream)
+  end
+
   def show_specialist_topic
     topic(params[:topic_slug], :specialist)
   end
 
-  def show_mainstream_subtopic
-    subtopic(params[:topic_slug], params[:subtopic_slug], :mainstream)
+  def show_specialist_subtopic
+    subtopic(params[:topic_slug], params[:subtopic_slug], :specialist)
+  end
+
+
+  def show_topics
+    url = "https://www.gov.uk/api/content/topic"
+    content_item = http_get(url).parsed_response
+    subtopics = content_item["links"]["children"].sort_by { |k| k["title"] }
+    payload = {
+      title: content_item["title"],
+      description: content_item["description"],
+      subtopics: subtopics.map {
+        | subtopic | {
+          title: subtopic["title"],
+          link: subtopic["base_path"]
+        }
+      }
+    }
+    render json: payload
   end
 
 
@@ -81,8 +103,7 @@ private
           link: content_item["links"]["parent"][0]["base_path"],
           title: content_item["links"]["parent"][0]["title"]
         },
-      taxon_search_filter: (Taxonomies.taxon_filter_lookup("/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}") || ""),
-
+      taxon_search_filter: Taxonomies.taxon_filter_lookup("/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}") || "",
       latest_news: latest_news_content(topic_type).map{ |news_result|
         {
           title: news_result["title"],
@@ -95,9 +116,17 @@ private
         }
       },
       organisations: topic_organisations(topic_type),
-      subtopic_sections: { items: accordion_content(content_item) },
       related_topics: related_topics(content_item)
     }
+
+    if topic_type == :mainstream
+      payload["subtopic_sections"] = { items: accordion_content(content_item) }
+    else
+      payload["subtopics"] = content_item["links"]["children"].map { |subtopic|
+        { title: subtopic["title"], link: subtopic["base_path"] }
+      }
+    end
+
     render json: payload
   end
 
@@ -222,7 +251,7 @@ private
     @topic_query ||= begin
       topic_path = "#{params[:topic_slug]}#{params[:subtopic_slug] ? "/":""}#{params[:subtopic_slug]}"
       topic_query_params = {
-        count: 5,
+        count: 3,
         fields: %w[title description image_url public_timestamp content_purpose_supergroup content_purpose_subgroup],
         order: "-public_timestamp",
         facet_organisations: "20",
