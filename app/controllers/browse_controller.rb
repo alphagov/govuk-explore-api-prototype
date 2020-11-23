@@ -66,8 +66,8 @@ private
     render json: payload
   end
 
-  def subtopic(topic_slug, subtopic_slug, topic_type)
 
+  def subtopic(topic_slug, subtopic_slug, topic_type)
     topic_prefix = topic_type == :mainstream ? "browse" : "topic"
 
     url = "https://www.gov.uk/api/content/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}"
@@ -76,28 +76,27 @@ private
     payload = {
       title: content_item["title"],
       description: content_item["description"],
-#      parent:
-#        {
-#          link: content_item["links"]["parent"][0]["base_path"],
-#          title: content_item["links"]["parent"][0]["title"]
-#        },
+      parent:
+        {
+          link: content_item["links"]["parent"][0]["base_path"],
+          title: content_item["links"]["parent"][0]["title"]
+        },
       taxon_search_filter: (Taxonomies.taxon_filter_lookup("/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}") || ""),
 
-      # latest_news: latest_news_content(topic_type).map{ |news_result|
-      #   {
-      #     title: news_result["title"],
-      #     description: news_result["description"],
-      #     url: news_result["_id"],
-      #     topic: news_result["content_purpose_supergroup"],
-      #     subtopic: news_result["content_purpose_subgroup"],
-      #     image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
-      #     public_timestamp: news_result["public_timestamp"],
-      #   }
-      # },
-      # organisations: topic_organisations(topic_type),
-      # featured: most_popular_content([content_item]),
-      # subtopic_sections: { items: accordion_content(content_item) },
-      # related_topics: related_topics(content_item)
+      latest_news: latest_news_content(topic_type).map{ |news_result|
+        {
+          title: news_result["title"],
+          description: news_result["description"],
+          url: news_result["_id"],
+          topic: news_result["content_purpose_supergroup"],
+          subtopic: news_result["content_purpose_subgroup"],
+          image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
+          public_timestamp: news_result["public_timestamp"],
+        }
+      },
+      organisations: topic_organisations(topic_type),
+      subtopic_sections: { items: accordion_content(content_item) },
+      related_topics: related_topics(content_item)
     }
     render json: payload
   end
