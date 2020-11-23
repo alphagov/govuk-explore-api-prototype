@@ -108,8 +108,8 @@ private
     }
   end
 
-  def topic_filter(topic_slug, topic_type)
-    taxon_id = Taxonomies.content_id(topic_slug, topic_type)
+  def topic_filter(topic_path, topic_type)
+    taxon_id = Taxonomies.content_id(topic_path, topic_type)
     if taxon_id.present?
       { filter_part_of_taxonomy_tree: taxon_id }
     else
@@ -220,13 +220,13 @@ private
 
   def topic_query(topic_type)
     @topic_query ||= begin
+      topic_path = "#{params[:topic_slug]}#{params[:subtopic_slug] ? "/":""}#{params[:subtopic_slug]}"
       topic_query_params = {
         count: 5,
-#        filter_content_purpose_subgroup: "news",
         fields: %w[title description image_url public_timestamp content_purpose_supergroup content_purpose_subgroup],
         order: "-public_timestamp",
         facet_organisations: "20",
-      }.merge(topic_filter(params[:subtopic_slug] || params[:topic_slug], topic_type))
+      }.merge(topic_filter(topic_path, topic_type))
       http_get("https://www.gov.uk/api/search.json?#{topic_query_params.to_query}")
     end
   end
