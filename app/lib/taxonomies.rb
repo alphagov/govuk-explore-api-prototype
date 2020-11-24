@@ -100,23 +100,57 @@ module Taxonomies
 
         #### SPECIALIST TOPICS ###########
 
+        # Animal welfare
         "/topic/animal-welfare" => "environment/animal-welfare", # TBC
         "/topic/animal-welfare/pets" => "environment/pets",
 
+        # Benefits
         "/topic/benefits-credits" => "welfare",
         "/topic/benefits-credits/child-benefit" => "welfare/child-benefit",
         "/topic/benefits-credits/tax-credits" => "welfare/tax-credits",
         "/topic/benefits-credits/universal-credit" => "welfare/universal-credit",
 
+        # Business and enterprise
         "/topic/business-enterprise" => "business-and-industry",
-        "/topic/business-enterprise/business-auditing-accounting-reporting" => "/business-and-industry/business-auditing-accounting-reporting",
+        "/topic/business-enterprise/business-auditing-accounting-reporting" => "business-and-industry/business-auditing-accounting-reporting",
         "/topic/business-enterprise/european-regional-development-funding" => "business/management-of-the-european-regional-development-fund",
         "/topic/business-enterprise/export-finance" => "business-and-industry/export-finance",
         "/topic/business-enterprise/farming" => "environment",
         "/topic/business-enterprise/licensing" => "business-and-industry/business-and-industry/business-licensing",
         "/topic/business-enterprise/manufacturing" => "business-and-industry/manufacturing",
         "/topic/business-enterprise/scientific-research-and-development" => "business-and-industry/scientific-research-and-development",
-        "/topic/business-enterprise/importing-exporting" => "business-and-industry/trade-restrictions-on-exports"
+        "/topic/business-enterprise/importing-exporting" => "business-and-industry/trade-restrictions-on-exports",
+
+        # Business tax
+        "/topic/business-tax" => "money/business-tax",
+        "/topic/business-tax/aggregates-levy" => "money/aggregates-levy",
+        "/topic/business-tax/air-passenger-duty" => "transport/air-passenger-duty",
+        "/topic/business-tax/alcohol-duties" => "money/alcohol-duties",
+        "/topic/business-tax/capital-allowances" => "money/capital-allowances",
+        "/topic/business-tax/climate-change-levy" => "money/climate-change-levy",
+        "/topic/business-tax/construction-industry-scheme" => "money/construction-industry-scheme",
+        "/topic/business-tax/corporation-tax" => "money/corporation-tax",
+        "/topic/business-tax/digital-services-tax" => "", # No match
+        "/topic/business-tax/employment-related-securities" => "money/employment-related-securities",
+        "/topic/business-tax/fuel-duty" => "money/fuel-duty",
+        "/topic/business-tax/gambling-duties" => "money/gambling-duties", # one of 2 matches
+        "/topic/business-tax/import-export" => "environment/producing-distributing-food-import-export",
+        "/topic/business-tax/insurance-premium-tax" => "money/business-tax-insurance-premium-tax-paying-insurance-premium-tax", # One of 2 matches
+        "/topic/business-tax/international-tax" => "money/international-tax",
+        "/topic/business-tax/investment-schemes" => "money/investment-schemes",
+        "/topic/business-tax/landfill-tax" => "money/landfill-tax",
+        "/topic/business-tax/large-midsize-business-guidance" => "money/large-midsize-business",
+        "/topic/business-tax/life-insurance-policies" => "money/life-insurance-policies",
+        "/topic/business-tax/money-laundering-regulations" => "money/dealing-with-hmrc-tax-agent-guidance-money-laundering-regulations",
+        "/topic/business-tax/ir35" => "money/ir35",
+        "/topic/business-tax/paye" => "money/dealing-with-hmrc-paying-hmrc-paye", # 1 of 2
+        "/topic/business-tax/pension-scheme-administration" => "money/pension-scheme-administration",
+        "/topic/business-tax/self-employed" => "employment/self-employed",
+        "/topic/business-tax/soft-drinks-industry-levy" => "", # No match
+        "/topic/business-tax/stamp-taxes" => "money/stamp-taxes",
+        "/topic/business-tax/stamp-duty-on-shares" => "money/stamp-duty-on-shares",
+        "/topic/business-tax/tobacco-products-duty" => "money/tobacco-products-duty",
+        "/topic/business-tax/vat" => "money/vat"
       }
   end
 end
