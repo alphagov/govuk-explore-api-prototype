@@ -68,8 +68,12 @@ private
     payload = {
       title: content_item["title"],
       description: content_item["description"],
-      taxon_search_filter: taxon_search_filter,
-      latest_news: latest_news_content(topic_type).map{ |news_result|
+      subtopics: subs
+    }
+
+    if taxon_search_filter != ""
+      payload[:taxon_search_filter] = taxon_search_filter
+      payload[:latest_news] = latest_news_content(topic_type).map{ |news_result|
         {
           title: news_result["title"],
           description: news_result["description"],
@@ -79,11 +83,11 @@ private
           image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
           public_timestamp: news_result["public_timestamp"],
         }
-      },
-      organisations: topic_organisations(topic_type),
-      featured: most_popular_content(subtopics, topic_type),
-      subtopics: subs
-    }
+      }
+      payload[:organisations] = topic_organisations(topic_type)
+      payload[:featured] = most_popular_content(subtopics, topic_type)
+    end
+
 
     render json: payload
   end
@@ -91,7 +95,6 @@ private
 
   def subtopic(topic_slug, subtopic_slug, topic_type)
     topic_prefix = topic_type == :mainstream ? "browse" : "topic"
-
     url = "https://www.gov.uk/api/content/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}"
     content_item = http_get(url).parsed_response
 
@@ -102,9 +105,13 @@ private
         {
           link: content_item["links"]["parent"][0]["base_path"],
           title: content_item["links"]["parent"][0]["title"]
-        },
-      taxon_search_filter: Taxonomies.taxon_filter_lookup("/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}") || "",
-      latest_news: latest_news_content(topic_type).map{ |news_result|
+        }
+    }
+
+    taxon_search_filter = (Taxonomies.taxon_filter_lookup("/#{topic_prefix}/#{topic_slug}") || "")
+    if taxon_search_filter != ""
+      payload[:taxon_search_filter] = taxon_search_filter
+      payload[:latest_news] = latest_news_content(topic_type).map{ |news_result|
         {
           title: news_result["title"],
           description: news_result["description"],
@@ -114,10 +121,10 @@ private
           image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
           public_timestamp: news_result["public_timestamp"],
         }
-      },
-      organisations: topic_organisations(topic_type),
-      related_topics: related_topics(content_item)
-    }
+      }
+      payload[:organisations] = topic_organisations(topic_type)
+      payload[:related_topics] = related_topics(content_item)
+    end
 
     if topic_type == :mainstream
       payload["subtopic_sections"] = { items: accordion_content(content_item) }
