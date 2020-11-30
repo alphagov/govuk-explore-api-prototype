@@ -126,13 +126,7 @@ private
       payload[:related_topics] = related_topics(content_item)
     end
 
-    if topic_type == :mainstream
-      payload["subtopic_sections"] = { items: accordion_content(content_item) }
-    else
-      payload["subtopics"] = content_item["links"]["children"].map { |subtopic|
-        { title: subtopic["title"], link: subtopic["base_path"] }
-      }
-    end
+    payload["subtopic_sections"] = { items: accordion_content(content_item, topic_type) }
 
     render json: payload
   end
@@ -153,10 +147,10 @@ private
     end
   end
 
-  def accordion_content(subtopic_details)
+  def accordion_content(subtopic_details, topic_type)
     groups = subtopic_details["details"]["groups"].any? ? subtopic_details["details"]["groups"] : default_group
 
-    items_from_search = accordion_items_from_search(subtopic_details)
+    items_from_search = accordion_items_from_search(subtopic_details, topic_type)
 
     groups.map { |detail|
       list = if subtopic_details["details"]["groups"].nil? || subtopic_details["details"]["groups"].empty?
@@ -202,16 +196,26 @@ private
     }.join
   end
 
-  def accordion_items_from_search(subtopic_details)
+  def accordion_items_from_search(subtopic_details, topic_type)
     accordion_items_from_search ||= begin
+      max_query_count = 500
       browse_content_query_params = {
-        count: 100,
-        filter_mainstream_browse_page_content_ids: subtopic_details["content_id"].sub("/browse/", ""),
+        count: max_query_count,
         fields: "title",
         order: "title",
       }
-      results = http_get("https://www.gov.uk/api/search.json?#{browse_content_query_params.to_query}")["results"]
-      results.map { |result| { title: result["title"].strip, link: result["_id"] } }
+      if topic_type == :mainstream
+        browse_content_query_params["filter_mainstream_browse_page_content_ids"] = subtopic_details["content_id"]
+      elsif topic_type == :specialist
+        browse_content_query_params["filter_specialist_sectors"] = subtopic_details["base_path"].sub("/topic/", "")
+      else
+        puts "Unknown topic type: #{topic_type}"
+      end
+      response = http_get("https://www.gov.uk/api/search.json?#{browse_content_query_params.to_query}")
+      if response["total"] == max_query_count
+        puts "WARNING: API returned item count limit (#{max_query_count}). There are probably more."
+      end
+      response["results"].map { |result| { title: result["title"].strip, link: result["_id"] } }
     end
   end
 
