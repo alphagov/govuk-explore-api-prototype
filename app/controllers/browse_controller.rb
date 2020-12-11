@@ -108,7 +108,7 @@ private
         }
     }
 
-    taxon_search_filter = (Taxonomies.taxon_filter_lookup("/#{topic_prefix}/#{topic_slug}") || "")
+    taxon_search_filter = (Taxonomies.taxon_filter_lookup("/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}") || "")
     if taxon_search_filter != ""
       payload[:taxon_search_filter] = taxon_search_filter
       payload[:latest_news] = latest_news_content(topic_type).map{ |news_result|
