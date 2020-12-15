@@ -55,27 +55,7 @@ module Taxonomies
 
         #### MAINSTREAM TOPICS ###########
 
-        "/browse/visas-immigration" => "entering-staying-uk",
-#        "/browse/visas-immigration/what-you-need-to-do" => "",
-        "/browse/visas-immigration/eu-eea-commonwealth" => "entering-staying-uk/rights-eu-eea-citizens",
-        "/browse/visas-immigration/tourist-short-stay-visas" =>  "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
-        "/browse/visas-immigration/family-visas" =>  "entering-staying-uk/family-visas",
-        "/browse/visas-immigration/immigration-appeals" =>  "entering-staying-uk/asylum-decisions-appeals", # one of 2
-        "/browse/visas-immigration/settle-in-the-uk" =>  "entering-staying-uk/permanent-stay-uk",
-        "/browse/visas-immigration/asylum/student-visas" =>  "entering-staying-uk/student-visas" ,
-        "/browse/visas-immigration/arriving-in-the-uk" =>  "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
-        "/browse/visas-immigration/work-visas" => "entering-staying-uk/Foreign-nationals-working-in-UK",
-
-        "/browse/tax" => "money",
-        "/browse/tax/capital-gains" => "money/personal-tax",
-        "/browse/tax/court-claims-debt-bankruptcy" =>  "money/court-claims-debt-bankruptcy",
-        "/browse/tax/dealing-with-hmrc" =>  "money/dealing-with-hmrc",
-        "/browse/tax/income-tax" =>  "money/personal-tax/income-tax" ,
-        "/browse/tax/inheritance-tax" =>  "money/personal-tax-inheritance-tax",
-        "/browse/tax/national-insurance" =>  "money/national-insurance",
-        "/browse/tax/self-assessment" =>  "money/self-assessment",
-        "/browse/tax/vat" => "money/vat",
-
+        # Benefits
         "/browse/benefits" => "welfare",
         "/browse/benefits/entitlement" =>  "welfare/entitlement",
         "/browse/benefits/universal-credit" =>  "welfare/universal-credit",
@@ -87,6 +67,81 @@ module Taxonomies
         "/browse/benefits/heating" =>  "welfare/heating",
         "/browse/benefits/bereavement" =>  "welfare/bereavement",
 
+
+        # Births, deaths, marriages and care
+
+        # Business and self employed
+        "/browse/business/" => "business-and-industry",
+        #        "/browse/business/setting-up" => "", # no match
+        "/browse/business/business-tax" => "money/business-tax",
+        "/browse/business/finance-support" => "business/finance-support",
+        "/browse/business/limited-company" => "business-and-industry/running-a-business",
+        "/browse/business/expenses-employee-benefits" => "money/expenses-employee-benefits",
+        "/browse/business/funding-debt" => "business-and-industry/business-debt-and-bankruptcy",
+        "/browse/business/premises-rates" => "business/premises-rates",
+        #        "/browse/business/food" => "", # No match
+        "/browse/business/imports" => "business-and-industry/importing",
+        "/browse/business/exports" => "business-and-industry/exporting",
+        "/browse/business/licences" => "business-and-industry/business-licensing",
+        "/browse/business/selling-closing" => "business-and-industry/company-closure-administration-liquidation-and-insolvency",
+        "/browse/business/sale-goods-services-data" => "crime-justice-and-law/data-protection",
+        "/browse/business/childcare-providers" => "childcare-parenting/providing-childcare",
+        "/browse/business/farming" => "environment/food-and-farming-industry",
+        "/browse/business/manufacturing" => "business-and-industry/manufacturing",
+        "/browse/business/intellectual-property" => "business/intellectual-property",
+        "/browse/business/waste-environment" => "environment/waste-environment",
+        "/browse/business/science" => "business-and-industry/scientific-research-and-development",
+        "/browse/business/generating-energy" => "business-and-industry/energy-industry-and-infrastructure-licensing-and-regulation",
+        "/browse/business/maritime" => "transport/maritime-and-shipping",
+
+        # Childcare and parenting
+
+        # Citizenship and living in the UK
+
+
+        # Crime, justice and the law
+
+
+        # Disabled people
+
+        # Driving and transport
+
+        # Education and learning
+
+        # Employing people
+
+        # Environment and countryside
+
+        # Housing and local services
+
+
+        # Money and tax
+        "/browse/tax" => "money",
+        "/browse/tax/capital-gains" => "money/personal-tax",
+        "/browse/tax/court-claims-debt-bankruptcy" =>  "money/court-claims-debt-bankruptcy",
+        "/browse/tax/dealing-with-hmrc" =>  "money/dealing-with-hmrc",
+        "/browse/tax/income-tax" =>  "money/personal-tax/income-tax" ,
+        "/browse/tax/inheritance-tax" =>  "money/personal-tax-inheritance-tax",
+        "/browse/tax/national-insurance" =>  "money/national-insurance",
+        "/browse/tax/self-assessment" =>  "money/self-assessment",
+        "/browse/tax/vat" => "money/vat",
+
+
+        # Passports, travel and living abroad
+
+        # Visas and immigration
+        "/browse/visas-immigration" => "entering-staying-uk",
+#        "/browse/visas-immigration/what-you-need-to-do" => "",
+        "/browse/visas-immigration/eu-eea-commonwealth" => "entering-staying-uk/rights-eu-eea-citizens",
+        "/browse/visas-immigration/tourist-short-stay-visas" =>  "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
+        "/browse/visas-immigration/family-visas" =>  "entering-staying-uk/family-visas",
+        "/browse/visas-immigration/immigration-appeals" =>  "entering-staying-uk/asylum-decisions-appeals", # one of 2
+        "/browse/visas-immigration/settle-in-the-uk" =>  "entering-staying-uk/permanent-stay-uk",
+        "/browse/visas-immigration/asylum/student-visas" =>  "entering-staying-uk/student-visas" ,
+        "/browse/visas-immigration/arriving-in-the-uk" =>  "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
+        "/browse/visas-immigration/work-visas" => "entering-staying-uk/Foreign-nationals-working-in-UK",
+
+        # Working, jobs and pensions
         "/browse/working" =>  "employment/working",
         "/browse/working/armed-forces" =>  "defence/working-armed-forces",
         "/browse/working/finding-job" =>  "employment/finding-job",
