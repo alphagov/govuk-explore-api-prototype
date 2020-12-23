@@ -205,7 +205,23 @@ module Taxonomies
         "/topic/business-tax/stamp-taxes" => "money/stamp-taxes",
         "/topic/business-tax/stamp-duty-on-shares" => "money/stamp-duty-on-shares",
         "/topic/business-tax/tobacco-products-duty" => "money/tobacco-products-duty",
-        "/topic/business-tax/vat" => "money/vat"
+        "/topic/business-tax/vat" => "money/vat",
+
+
+        # Personal tax
+        "/topic/personal-tax" => "money/personal-tax",
+        "/topic/personal-tax/capital-gains-tax" => "money/capital-gains-tax",
+        "/topic/personal-tax/coming-to-uk" => "money/coming-to-uk",
+        "/topic/personal-tax/foreign-entertainer-rules" => "money/foreign-entertainer-rules",
+        "/topic/personal-tax/income-tax" => "money/income-tax",
+        "/topic/personal-tax/inheritance-tax" => "money/personal-tax-inheritance-tax",
+        "/topic/personal-tax/leaving-uk" => "money/leaving-uk",
+        "/topic/personal-tax/living-working-abroad-offshore" => "money/living-working-abroad-offshore",
+        "/topic/personal-tax/national-insurance" => "money/national-insurance",
+        "/topic/personal-tax/non-resident-landlord-scheme" => "money/non-resident-landlord-scheme",
+        "/topic/personal-tax/self-assessment" => "money/self-assessment",
+        "/topic/personal-tax/savings-investment-tax" => "money/savings-investment-tax",
+        "/topic/personal-tax/personal-tax/trusts" => "money/trusts"
       }
   end
 end
