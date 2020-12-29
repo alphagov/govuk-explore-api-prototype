@@ -69,6 +69,14 @@ module Taxonomies
 
 
         # Births, deaths, marriages and care
+        "/browse/births-deaths-marriages" => "life-circumstances",
+        "/browse/births-deaths-marriages/register-offices" => "life-circumstances/register-offices",
+        "/browse/births-deaths-marriages/child" => "welfare/child-benefit",
+        "/browse/births-deaths-marriages/death" => "life-circumstances/death",
+        "/browse/births-deaths-marriages/child-adoption" => "life-circumstances/child-adoption",
+        "/browse/births-deaths-marriages/lasting-power-attorney" => "life-circumstances/lasting-power-attorney",
+        "/browse/births-deaths-marriages/marriage-divorce" => "life-circumstances/marriage-divorce",
+
 
         # Business and self employed
         "/browse/business/" => "business-and-industry",
