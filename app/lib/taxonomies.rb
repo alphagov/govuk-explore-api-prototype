@@ -222,6 +222,80 @@ module Taxonomies
         "/topic/business-tax/tobacco-products-duty" => "money/tobacco-products-duty",
         "/topic/business-tax/vat" => "money/vat",
 
+        # Climate change and energy
+        "/topic/climate-change-energy" => "environment/climate-change-energy",
+        "/topic/climate-change-energy/climate-change-agreements" => "environment/climate-change-adaptation",
+        "/topic/climate-change-energy/emissions" => "environment/climate-change-energy-emissions",
+        "/topic/climate-change-energy/energy-efficiency" => "environment/climate-change-energy-energy-efficiency",
+        "/topic/climate-change-energy/energy-infrastructure" => "environment/energy-infrastructure",
+        "/topic/climate-change-energy/energy-prices-bills" => "housing-local-and-community/household-energy",
+        "/topic/climate-change-energy/energy-security" => "business/uk-energy-security",
+        "/topic/climate-change-energy/international-climate-change" => "environment/climate-change-international-action",
+        "/topic/climate-change-energy/low-carbon-energy" => "environment/low-carbon-technologies",
+
+        # Coal
+
+        # Commercial fishing and fisheries
+
+        # Community organisations
+
+        # Company registration and filing
+
+        # Competition
+
+        # Crime and policing
+
+        # Dealing with HMRC
+
+        # Death and wills
+
+        # Defence and armed forces
+
+        # Driving and motorcycle instructors
+
+        # Driving tests and learning to drive
+
+        # Environmental management
+
+        # Farming and food grants and payments
+
+        # Further education and skills
+
+        # Government
+
+        # Guidance for government digital publishing and services
+
+        # Health protection
+
+        # Help for British national overseas
+
+        # High Speed 2
+
+        # Higher education
+
+        # Housing
+
+        # Intellectual property
+
+        # Keeping farmed animals
+
+        # Land registration
+
+        # Law and the justice system
+
+        # Legal aid
+
+        # Local communities
+
+        # Local government
+
+        # MOT and vehicle tests
+
+        # Medicines, medical devices and blood regulation and safety
+
+        # Oil and gas
+
+        # Outdoor access and recreation
 
         # Personal tax
         "/topic/personal-tax" => "money/personal-tax",
@@ -237,6 +311,32 @@ module Taxonomies
         "/topic/personal-tax/self-assessment" => "money/self-assessment",
         "/topic/personal-tax/savings-investment-tax" => "money/savings-investment-tax",
         "/topic/personal-tax/personal-tax/trusts" => "money/trusts"
+
+        # Planning and development
+
+        # Population screening programmes
+
+        # Prisons and probation
+
+        # Producing and distributing food
+
+        # Public safety and emergencies
+
+        # Schools, colleges and children's services
+
+        # Setting up and running a charity
+
+        # Ships and cargoes
+
+        # Transport
+
+        # Visas and immigration operational guidance
+
+        # Work and careers
+
+        # Working at sea
+
+
       }
   end
 end
