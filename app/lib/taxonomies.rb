@@ -103,6 +103,13 @@ module Taxonomies
         "/browse/business/maritime" => "transport/maritime-and-shipping",
 
         # Childcare and parenting
+        "/browse/childcare-parenting" => "childcare-parenting",
+        "/browse/childcare-parenting/pregnancy-birth" => "childcare-parenting/pregnancy-and-birth",
+        "/browse/childcare-parenting/fostering-adoption-surrogacy" => "childcare-parenting/adoption-fostering-and-surrogacy",
+        "/browse/childcare-parenting/financial-help-children" => "childcare-parenting/financial-help-if-you-have-children",
+        "/browse/childcare-parenting/childcare" => "childcare-parenting/childcare-and-early-years",
+        "/browse/childcare-parenting/schools-education" => "education/starting-and-attending-school",
+        "/browse/childcare-parenting/divorce-separation-legal" => "childcare-parenting/divorce-separation-and-legal-issues",
 
         # Citizenship and living in the UK
 
