@@ -124,6 +124,15 @@ module Taxonomies
         # Education and learning
 
         # Employing people
+        "/browse/employing-people" => "business-and-industry/employing-people",
+        "/browse/employing-people/contracts" => "",
+        "/browse/employing-people/dismissals-redundancies" => "business-and-industry/employing-people",
+        "/browse/employing-people/health-safety" => "",
+        "/browse/employing-people/payroll" => "business-and-industry/employing-people",
+        "/browse/employing-people/pensions" => "",
+        "/browse/employing-people/recruiting-hiring" => "business-and-industry/employing-people",
+        "/browse/employing-people/time-off" => "",
+        "/browse/employing-people/trade-unions" => "",
 
         # Environment and countryside
 
@@ -310,7 +319,7 @@ module Taxonomies
         "/topic/personal-tax/non-resident-landlord-scheme" => "money/non-resident-landlord-scheme",
         "/topic/personal-tax/self-assessment" => "money/self-assessment",
         "/topic/personal-tax/savings-investment-tax" => "money/savings-investment-tax",
-        "/topic/personal-tax/personal-tax/trusts" => "money/trusts"
+        "/topic/personal-tax/personal-tax/trusts" => "money/trusts",
 
         # Planning and development
 
@@ -333,6 +342,11 @@ module Taxonomies
         # Visas and immigration operational guidance
 
         # Work and careers
+        "/topic/work-careers" => "",
+        "/topic/work-careers/government-graduate-schemes" => "",
+        "/topic/work-careers/public-service-pensions" => "employment/public-service-pensions",
+        "/topic/work-careers/secondments-with-government" => "employment/secondments-with-government",
+        "/topic/work-careers/trade-unions" => "",
 
         # Working at sea
 
