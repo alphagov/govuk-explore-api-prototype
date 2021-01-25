@@ -112,12 +112,27 @@ module Taxonomies
         "/browse/childcare-parenting/divorce-separation-legal" => "childcare-parenting/divorce-separation-and-legal-issues",
 
         # Citizenship and living in the UK
-
+        "browse/citizenship" => "entering-staying-uk",
+        "browse/citizenship/citizenship" => "entering-staying-uk/citizenship",
+        "browse/citizenship/charities-honours" => "society-and-culture/charities-honours",
+        "browse/citizenship/government" => "government/democracy",
+        "browse/citizenship/voting" => "government/voting",
 
         # Crime, justice and the law
-
+        "browse/justice" => "crime-justice-and-law",
+        "browse/justice/courts-sentencing-tribunals" => "crime-justice-and-law/courts-sentencing-tribunals",
+        "browse/justice/prisons-probation" => "crime-justice-and-law/prisons-probation",
+        "browse/justice/reporting-crimes-compensation" => "crime-justice-and-law/reporting-crimes-compensation",
+        "browse/justice/young-people" => "crime-justice-and-law/young-people-and-the-law",
+        "browse/justice/rights" => "crime-justice-and-law/rights",
 
         # Disabled people
+        "browse/disabilities" => "health-and-social-care/disabilities",
+        "browse/disabilities/benefits" => "health-and-social-care/disabilities-benefits",
+        "browse/disabilities/carers" => "health-and-social-care/disabilities-carers",
+        "browse/disabilities/equipement" => "health-and-social-care/disabilities-equipment",
+        "browse/disabilities/rights" => "health-and-social-care/disabilities-rights",
+        "browse/disabilities/work" => "employment/work",
 
         # Driving and transport
 
@@ -152,6 +167,11 @@ module Taxonomies
 
 
         # Passports, travel and living abroad
+        "/browse/abroad" => "going-and-being-abroad",
+        "/browse/abroad/living-abroad" => "going-and-being-abroad/living-abroad",
+        "/browse/abroad/passports" => "going-and-being-abroad/passports",
+        "/browse/abroad/travel-abroad" => "going-and-being-abroad/travel-abroad",
+
 
         # Visas and immigration
         "/browse/visas-immigration" => "entering-staying-uk",
@@ -255,6 +275,15 @@ module Taxonomies
         # Crime and policing
 
         # Dealing with HMRC
+        "/topic/dealing-with-hmrc" => "money/dealing-with-hmrc",
+        "/topic/dealing-with-hmrc/complaints-appeals" => "money/complaints-appeals",
+        "/topic/dealing-with-hmrc/paying-hmrc" => "money/paying-hmrc",
+        "/topic/dealing-with-hmrc/phishing-scams" => "money/phishing-scams",
+        "/topic/dealing-with-hmrc/shared-workspace" => "money/shared-workspace",
+        "/topic/dealing-with-hmrc/software-development" => "money/dealing-with-hmrc-software-development",
+        "/topic/dealing-with-hmrc/tax-agent-guidance" => "money/tax-agent-guidance",
+        "/topic/dealing-with-hmrc/tax-avoidance" => "money/tax-avoidance",
+        "/topic/dealing-with-hmrc/tax-compliance" => "money/tax-compliance",
 
         # Death and wills
 
@@ -340,6 +369,20 @@ module Taxonomies
         # Transport
 
         # Visas and immigration operational guidance
+        "/topic/immigration-operational-guidance" => "",
+        "/topic/immigration-operational-guidance/asylum-policy" => "",
+        "/topic/immigration-operational-guidance/commercial-casework-guidance" => "",
+        "/topic/immigration-operational-guidance/enforcement" => "",
+        "/topic/immigration-operational-guidance/entry-clearance-guidance" => "entering-staying-uk/visas-entry-clearance",
+        "/topic/immigration-operational-guidance/fees-forms" => "",
+        "/topic/immigration-operational-guidance/immigration-rules" => "entering-staying-uk/immigration-rules",
+        "/topic/immigration-operational-guidance/modernised-guidance" => "",
+        "/topic/immigration-operational-guidance/nationality-guidance" => "",
+        "/topic/immigration-operational-guidance/non-compliance-biometric-registration" => "",
+        "/topic/immigration-operational-guidance/rights-responsibilities" => "",
+        "/topic/immigration-operational-guidance/stateless-guidance" => "",
+        "/topic/immigration-operational-guidance/visitors" => "entering-staying-uk/visit-and-transit-visas",
+        "/topic/immigration-operational-guidance/windrush-scheme" => "",
 
         # Work and careers
         "/topic/work-careers" => "",
