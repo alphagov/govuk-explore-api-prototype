@@ -159,7 +159,7 @@ module Taxonomies
         "/browse/tax/capital-gains" => "money/personal-tax",
         "/browse/tax/court-claims-debt-bankruptcy" =>  "money/court-claims-debt-bankruptcy",
         "/browse/tax/dealing-with-hmrc" =>  "money/dealing-with-hmrc",
-        "/browse/tax/income-tax" =>  "money/personal-tax/income-tax" ,
+        "/browse/tax/income-tax" =>  "money/income-tax" ,
         "/browse/tax/inheritance-tax" =>  "money/personal-tax-inheritance-tax",
         "/browse/tax/national-insurance" =>  "money/national-insurance",
         "/browse/tax/self-assessment" =>  "money/self-assessment",
