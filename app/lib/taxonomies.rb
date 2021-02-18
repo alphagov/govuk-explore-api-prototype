@@ -154,6 +154,13 @@ module Taxonomies
         "/browse/driving/manufacture-adapt-vehicle" => "transport/vehicle-manufacturing-and-modification",
 
         # Education and learning
+        "/browse/education" => "education",
+        "/browse/education/find-course" => "education/further-and-higher-education-courses-and-qualifications",
+        # above should be "Further and higher education, skills and vocational training" but currently replaced by coronavirus
+        "/browse/education/school-admissions-transport" => "education/school-food-accommodation-transport-and-uniform", # multiple
+        "/browse/education/school-life" => "education/school-curriculum",
+        "/browse/education/student-finance" => "education/funding-and-finance-for-students",
+        "/browse/education/universities-higher-education" => "education/further-and-higher-education-courses-and-qualifications",
 
         # Employing people
         "/browse/employing-people" => "business-and-industry/employing-people",
