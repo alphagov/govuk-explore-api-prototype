@@ -112,27 +112,27 @@ module Taxonomies
         "/browse/childcare-parenting/divorce-separation-legal" => "childcare-parenting/divorce-separation-and-legal-issues",
 
         # Citizenship and living in the UK
-        "browse/citizenship" => "entering-staying-uk",
-        "browse/citizenship/citizenship" => "entering-staying-uk/citizenship",
-        "browse/citizenship/charities-honours" => "society-and-culture/charities-honours",
-        "browse/citizenship/government" => "government/democracy",
-        "browse/citizenship/voting" => "government/voting",
+        "/browse/citizenship" => "entering-staying-uk",
+        "/browse/citizenship/citizenship" => "entering-staying-uk/citizenship",
+        "/browse/citizenship/charities-honours" => "society-and-culture/charities-honours",
+        "/browse/citizenship/government" => "government/democracy",
+        "/browse/citizenship/voting" => "government/voting",
 
         # Crime, justice and the law
-        "browse/justice" => "crime-justice-and-law",
-        "browse/justice/courts-sentencing-tribunals" => "crime-justice-and-law/courts-sentencing-tribunals",
-        "browse/justice/prisons-probation" => "crime-justice-and-law/prisons-probation",
-        "browse/justice/reporting-crimes-compensation" => "crime-justice-and-law/reporting-crimes-compensation",
-        "browse/justice/young-people" => "crime-justice-and-law/young-people-and-the-law",
-        "browse/justice/rights" => "crime-justice-and-law/rights",
+        "/browse/justice" => "crime-justice-and-law",
+        "/browse/justice/courts-sentencing-tribunals" => "crime-justice-and-law/courts-sentencing-tribunals",
+        "/browse/justice/prisons-probation" => "crime-justice-and-law/prisons-probation",
+        "/browse/justice/reporting-crimes-compensation" => "crime-justice-and-law/reporting-crimes-compensation",
+        "/browse/justice/young-people" => "crime-justice-and-law/young-people-and-the-law",
+        "/browse/justice/rights" => "crime-justice-and-law/rights",
 
         # Disabled people
-        "browse/disabilities" => "health-and-social-care/disabilities",
-        "browse/disabilities/benefits" => "health-and-social-care/disabilities-benefits",
-        "browse/disabilities/carers" => "health-and-social-care/disabilities-carers",
-        "browse/disabilities/equipement" => "health-and-social-care/disabilities-equipment",
-        "browse/disabilities/rights" => "health-and-social-care/disabilities-rights",
-        "browse/disabilities/work" => "employment/work",
+        "/browse/disabilities" => "health-and-social-care/disabilities",
+        "/browse/disabilities/benefits" => "health-and-social-care/disabilities-benefits",
+        "/browse/disabilities/carers" => "health-and-social-care/disabilities-carers",
+        "/browse/disabilities/equipement" => "health-and-social-care/disabilities-equipment",
+        "/browse/disabilities/rights" => "health-and-social-care/disabilities-rights",
+        "/browse/disabilities/work" => "employment/work",
 
         # Driving and transport
 
