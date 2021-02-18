@@ -174,6 +174,15 @@ module Taxonomies
         "/browse/employing-people/trade-unions" => "",
 
         # Environment and countryside
+        "/browse/environment-countryside" => "environment",
+        "/browse/environment-countryside/boats-waterways" => "environment/boats-waterways",
+        "/browse/environment-countryside/coasts" => "environment/river-maintenance-flooding-coastal-erosion", # TBC
+        "/browse/environment-countryside/countryside" => "environment/countryside",
+        "/browse/environment-countryside/fishing-hunting" => "environment/rural-and-countryside", # TBC
+        "/browse/environment-countryside/flooding-extreme-weather" => "environment/rural-and-countryside", #TBC
+        "/browse/environment-countryside/recycling-waste-management" => "environment/waste-and-recycling",
+        "/browse/environment-countryside/treasure-wrecks" => "environment/rural-and-countryside", # TBC
+        "/browse/environment-countryside/wildlife-biodiversity" => "environment/wildlife-animals-biodiversity-and-ecosystems",
 
         # Housing and local services
 
