@@ -135,6 +135,23 @@ module Taxonomies
         "/browse/disabilities/work" => "employment/work",
 
         # Driving and transport
+        "/browse/driving/" => "transport",
+        "/browse/driving/driving-licences" => "transport/driving-licences",
+        "/browse/driving/vehicle-tax-mot-insurance" => "transport/vehicle-ownership-approval-and-standards",
+        "/browse/driving/learning-to-drive" => "transport/driving-and-motorcycle-tests", # Multiple
+        "/browse/driving/number-plate" => "transport/vehicle-registration-log-books-and-number-plates",
+        "/browse/driving/buy-sell-scrap-vehicle" => "transport/buying-selling-registering-and-scrapping-a-vehicle",
+        "/browse/driving/disability-health-condition" => "transport/driving-and-medical-conditions", # Multiple
+        "/browse/driving/highway-code-road-safety" => "transport/road-safety-driving-rules-and-penalties",
+        "/browse/driving/vehicle-and-driver-information" => "transport/driver-and-vehicle-record",
+        "/browse/driving/penalty-points-fines-bans" => "transport/penalty-points-fines-and-driving-bans",
+        "/browse/driving/driving-uk-and-abroad" => "transport/driving-abroad",
+        "/browse/driving/drivers-lorries-buses" => "transport/professional-driving-of-lorries-buses-and-coaches",
+        "/browse/driving/businesses" => "transport/transport-businesses-and-vehicle-operator-licences",
+        "/browse/driving/teaching-people-to-drive" => "transport/driving-instruction-and-driving-lessons",
+        "/browse/driving/driving-enforcing-the-law" => "transport/road-safety-driving-rules-and-penalties",
+        "/browse/driving/parking-public-transport-environment" => "transport/road-infrastructure",
+        "/browse/driving/manufacture-adapt-vehicle" => "transport/vehicle-manufacturing-and-modification",
 
         # Education and learning
 
