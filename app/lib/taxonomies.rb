@@ -185,7 +185,18 @@ module Taxonomies
         "/browse/environment-countryside/wildlife-biodiversity" => "environment/wildlife-animals-biodiversity-and-ecosystems",
 
         # Housing and local services
-
+        "/browse/housing-local-services/" => "housing-local-and-community",
+        "/browse/housing-local-services/landlords" => "housing-local-and-community/landlords",
+        "/browse/housing-local-services/council-housing-association" => "housing-local-and-community/council-housing-association",
+        "/browse/housing-local-services/council-tax" => "regional-and-local-government/local-government-council-tax",
+        "/browse/housing-local-services/household-energy" => "housing-local-and-community/household-energy",
+        "/browse/housing-local-services/local-councils" => "regional-and-local-government/local-councils",
+        "/browse/housing-local-services/noise-neighbours" => "housing-local-and-community/neighours-noise-pests",
+        "/browse/housing-local-services/owning-renting-property" => "housing-local-and-community/owning-renting-property",
+        "/browse/housing-local-services/planning-permission" => "housing-local-and-community/planning-permission-appeals",
+        "/browse/housing-local-services/recycling-rubbish" => "housing-local-and-community/recycling-rubbish",
+        "/browse/housing-local-services/repossessions-evictions" => "housing-local-and-community/repossessions-evictions",
+        "/browse/housing-local-services/safety-environment" => "housing-local-and-community/housing-local-services-safety-environment",
 
         # Money and tax
         "/browse/tax" => "money",
