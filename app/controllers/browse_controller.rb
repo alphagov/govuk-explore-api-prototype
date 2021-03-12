@@ -21,16 +21,16 @@ class BrowseController < ApplicationController
 
 
   def show_topics
-    url = "https://www.gov.uk/api/content/topic"
+    url = "https://www.gov.uk/api/content/browse"
     content_item = http_get(url).parsed_response
-    subtopics = content_item["links"]["children"].sort_by { |k| k["title"] }
+    subtopics = content_item["links"]["top_level_browse_pages"].sort_by { |k| k["title"] }
     payload = {
       title: content_item["title"],
-      description: content_item["description"],
       subtopics: subtopics.map {
         | subtopic | {
           title: subtopic["title"],
-          link: subtopic["base_path"]
+          link: subtopic["base_path"],
+          description: subtopic["description"]
         }
       }
     }
@@ -148,6 +148,9 @@ private
   end
 
   def accordion_content(subtopic_details, topic_type)
+
+    puts subtopic_details["details"]
+
     groups = subtopic_details["details"]["groups"].any? ? subtopic_details["details"]["groups"] : default_group
 
     items_from_search = accordion_items_from_search(subtopic_details, topic_type)
