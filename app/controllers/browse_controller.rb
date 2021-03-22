@@ -95,7 +95,9 @@ private
 
   def subtopic(topic_slug, subtopic_slug, topic_type)
     topic_prefix = topic_type == :mainstream ? "browse" : "topic"
+
     url = "https://www.gov.uk/api/content/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}"
+    puts "fetching #{url}"
     content_item = http_get(url).parsed_response
 
     payload = {
@@ -148,10 +150,11 @@ private
   end
 
   def accordion_content(subtopic_details, topic_type)
-
-    puts subtopic_details["details"]
-
-    groups = subtopic_details["details"]["groups"].any? ? subtopic_details["details"]["groups"] : default_group
+    if subtopic_details["details"] and subtopic_details["details"]["groups"]
+      groups = subtopic_details["details"]["groups"].any? ? subtopic_details["details"]["groups"] : default_group
+    else
+      groups = []
+    end
 
     items_from_search = accordion_items_from_search(subtopic_details, topic_type)
 
@@ -284,6 +287,6 @@ private
   end
 
   def http_get(url)
-    HTTParty.get(url)
+    HTTParty.get(url, follow_redirects: true)
   end
 end
