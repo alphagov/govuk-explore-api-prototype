@@ -1,8 +1,7 @@
-require 'httparty'
-require 'taxonomies'
+require "httparty"
+require "taxonomies"
 
 class BrowseController < ApplicationController
-
   def show_mainstream_topic
     topic(params[:topic_slug], :mainstream)
   end
@@ -19,27 +18,24 @@ class BrowseController < ApplicationController
     subtopic(params[:topic_slug], params[:subtopic_slug], :specialist)
   end
 
-
   def show_topics
     url = "https://www.gov.uk/api/content/browse"
     content_item = http_get(url).parsed_response
     subtopics = content_item["links"]["top_level_browse_pages"].sort_by { |k| k["title"] }
     payload = {
       title: content_item["title"],
-      subtopics: subtopics.map {
-        | subtopic | {
+      subtopics: subtopics.map do |subtopic|
+        {
           title: subtopic["title"],
           link: subtopic["base_path"],
-          description: subtopic["description"]
+          description: subtopic["description"],
         }
-      }
+      end,
     }
     render json: payload
   end
 
-
 private
-
 
   def topic(topic_slug, topic_type)
     if topic_type == :mainstream
@@ -49,12 +45,13 @@ private
       subtopics = content_item["links"]["second_level_browse_pages"]
 
       taxon_search_filter = (Taxonomies.taxon_filter_lookup("/browse/#{topic_slug}") || "")
-      subs = subtopic_order.map{ |content_id|
-        subtopic = subtopics.detect{|s| s["content_id"] == content_id }
+      subs = subtopic_order.map { |content_id|
+        subtopic = subtopics.detect { |s| s["content_id"] == content_id }
         next if subtopic.nil?
+
         {
           title: subtopic["title"],
-          link: subtopic["base_path"]
+          link: subtopic["base_path"],
         }
       }.compact
     else
@@ -68,12 +65,12 @@ private
     payload = {
       title: content_item["title"],
       description: content_item["description"],
-      subtopics: subs
+      subtopics: subs,
     }
 
     if taxon_search_filter != ""
       payload[:taxon_search_filter] = taxon_search_filter
-      payload[:latest_news] = latest_news_content(topic_type).map{ |news_result|
+      payload[:latest_news] = latest_news_content(topic_type).map do |news_result|
         {
           title: news_result["title"],
           description: news_result["description"],
@@ -83,15 +80,13 @@ private
           image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
           public_timestamp: news_result["public_timestamp"],
         }
-      }
+      end
       payload[:organisations] = topic_organisations(topic_type)
       payload[:featured] = most_popular_content(subtopics, topic_type)
     end
 
-
     render json: payload
   end
-
 
   def subtopic(topic_slug, subtopic_slug, topic_type)
     topic_prefix = topic_type == :mainstream ? "browse" : "topic"
@@ -106,14 +101,14 @@ private
       parent:
         {
           link: content_item["links"]["parent"][0]["base_path"],
-          title: content_item["links"]["parent"][0]["title"]
-        }
+          title: content_item["links"]["parent"][0]["title"],
+        },
     }
 
     taxon_search_filter = (Taxonomies.taxon_filter_lookup("/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}") || "")
     if taxon_search_filter != ""
       payload[:taxon_search_filter] = taxon_search_filter
-      payload[:latest_news] = latest_news_content(topic_type).map{ |news_result|
+      payload[:latest_news] = latest_news_content(topic_type).map do |news_result|
         {
           title: news_result["title"],
           description: news_result["description"],
@@ -123,7 +118,7 @@ private
           image_url: news_result["image_url"] || "https://assets.publishing.service.gov.uk/media/5e59279b86650c53b2cefbfe/placeholder.jpg",
           public_timestamp: news_result["public_timestamp"],
         }
-      }
+      end
       payload[:organisations] = topic_organisations(topic_type)
       payload[:related_topics] = related_topics(content_item)
     end
@@ -133,11 +128,10 @@ private
     render json: payload
   end
 
-
   def related_topics(subtopic_details)
-    (subtopic_details["links"]["second_level_browse_pages"] || []).map { |topic|
+    (subtopic_details["links"]["second_level_browse_pages"] || []).map do |topic|
       { title: topic["title"], link: topic["base_path"] }
-    }
+    end
   end
 
   def topic_filter(topic_path, topic_type)
@@ -145,32 +139,33 @@ private
     if taxon_id.present?
       { filter_part_of_taxonomy_tree: taxon_id }
     else
-     {}
+      {}
     end
   end
 
   def accordion_content(subtopic_details, topic_type)
-    if subtopic_details["details"] and subtopic_details["details"]["groups"]
-      groups = subtopic_details["details"]["groups"].any? ? subtopic_details["details"]["groups"] : default_group
-    else
-      groups = []
-    end
+    groups = if subtopic_details["details"] && subtopic_details["details"]["groups"]
+               subtopic_details["details"]["groups"].any? ? subtopic_details["details"]["groups"] : default_group
+             else
+               []
+             end
 
     items_from_search = accordion_items_from_search(subtopic_details, topic_type)
 
     groups.map { |detail|
       list = if subtopic_details["details"]["groups"].nil? || subtopic_details["details"]["groups"].empty?
-        search_accordion_list_items(items_from_search)
-      elsif subtopic_details["details"]["second_level_ordering"] == "alphabetical" || detail["contents"].nil?
-        alphabetical_accordion_list_items(subtopic_details["links"]["children"])
-      else
-        curated_accordion_list_items(detail["contents"], items_from_search)
-      end
+               search_accordion_list_items(items_from_search)
+             elsif subtopic_details["details"]["second_level_ordering"] == "alphabetical" || detail["contents"].nil?
+               alphabetical_accordion_list_items(subtopic_details["links"]["children"])
+             else
+               curated_accordion_list_items(detail["contents"], items_from_search)
+             end
 
       next if list.empty?
+
       {
         heading: { text: detail["name"] || "A to Z" },
-        content: { html:  "<ul class='govuk-list'>#{list}</ul>" }
+        content: { html: "<ul class='govuk-list'>#{list}</ul>" },
       }
     }.compact
   end
@@ -181,7 +176,7 @@ private
 
   def alphabetical_accordion_list_items(tagged_children)
     tagged_children.sort_by { |child| child["title"] }.map { |child|
-      "<li><a href='#{child["base_path"]}'>#{child["title"]}</a></li>"
+      "<li><a href='#{child['base_path']}'>#{child['title']}</a></li>"
     }.join
   end
 
@@ -189,7 +184,7 @@ private
     tagged_children_paths = items_from_search.map { |child| child[:link] }
 
     ordered_paths
-      .select{ |path| tagged_children_paths.include? path }
+      .select { |path| tagged_children_paths.include? path }
       .map { |path|
         current_item = items_from_search.detect { |child| child[:link] == path }
         "<li><a href='#{path}'>#{current_item[:title]}</a></li>"
@@ -229,7 +224,7 @@ private
     most_popular_content ||= begin
       popular_content_query_params = {
         count: 3,
-        fields: "title"
+        fields: "title",
       }
       if topic_type == :mainstream
         popular_content_query_params["filter_mainstream_browse_pages"] =
@@ -253,20 +248,20 @@ private
   def topic_organisations(topic_type)
     # Comes from a response looking like: https://www.gov.uk/api/search.json?facet_organisations=20&count=0
     @topic_organisations ||= begin
-      topic_query(topic_type)["facets"]["organisations"]["options"].map { |org_option|
+      topic_query(topic_type)["facets"]["organisations"]["options"].map do |org_option|
         {
           title: org_option["value"]["title"],
           url: org_option["value"]["link"],
           crest: org_option["value"]["organisation_crest"],
           slug: org_option["value"]["slug"],
         }
-      }
+      end
     end
   end
 
   def topic_query(topic_type)
     @topic_query ||= begin
-      topic_path = "#{params[:topic_slug]}#{params[:subtopic_slug] ? "/":""}#{params[:subtopic_slug]}"
+      topic_path = "#{params[:topic_slug]}#{params[:subtopic_slug] ? '/' : ''}#{params[:subtopic_slug]}"
       topic_query_params = {
         count: 3,
         fields: %w[title description image_url public_timestamp content_purpose_supergroup content_purpose_subgroup],
