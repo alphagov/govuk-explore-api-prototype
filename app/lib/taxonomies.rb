@@ -1,10 +1,7 @@
-require 'httparty'
+require "httparty"
 
 module Taxonomies
-
-
   class << self
-
     def taxon_filter_lookup(topic_path)
       qsp = ["level_one_taxon=", "level_two_taxon=", "level_three_taxon=", "level_four_taxon=", "level_five_taxon=", "level_six_taxon=", "level_seven_taxon=", "level_eight_taxon=", "level_nine_taxon="]
 
@@ -16,19 +13,18 @@ module Taxonomies
         return ""
       end
 
-      while true
+      loop do
         results = http_get("https://www.gov.uk/api/content/#{taxon}")
         taxon_path_uuids.insert(0, results["content_id"])
         parent_taxons = results["links"]["parent_taxons"]
-        if parent_taxons.nil?
-          break
-        end
+        break if parent_taxons.nil?
+
         taxon = parent_taxons[0]["base_path"]
       end
 
       qsp
         .zip(taxon_path_uuids)
-        .filter { |pair| pair[1] != nil }
+        .filter { |pair| !pair[1].nil? }
         .map { |z| z.flatten.join }
         .join "&"
     end
@@ -38,15 +34,14 @@ module Taxonomies
       taxon_content_id(@@MAP["/#{prefix}/#{topic_path}"])
     end
 
-    private
+  private
 
     def http_get(url)
       HTTParty.get(url)
     end
 
-
     def taxon_content_id(taxon_path)
-      results = http_get("https://www.gov.uk/api/content/#{taxon_path}");
+      results = http_get("https://www.gov.uk/api/content/#{taxon_path}")
       results["content_id"]
     end
 
@@ -57,16 +52,15 @@ module Taxonomies
 
         # Benefits
         "/browse/benefits" => "welfare",
-        "/browse/benefits/entitlement" =>  "welfare/entitlement",
-        "/browse/benefits/universal-credit" =>  "welfare/universal-credit",
-        "/browse/benefits/tax-credits" =>  "welfare/tax-credits",
-        "/browse/benefits/jobseekers-allowance" =>  "welfare/jobseekers-allowance",
-        "/browse/benefits/disability" =>  "welfare/disability",
-        "/browse/benefits/child" =>  "welfare/child-benefit",
-        "/browse/benefits/families" =>  "welfare/families",
-        "/browse/benefits/heating" =>  "welfare/heating",
-        "/browse/benefits/bereavement" =>  "welfare/bereavement",
-
+        "/browse/benefits/entitlement" => "welfare/entitlement",
+        "/browse/benefits/universal-credit" => "welfare/universal-credit",
+        "/browse/benefits/tax-credits" => "welfare/tax-credits",
+        "/browse/benefits/jobseekers-allowance" => "welfare/jobseekers-allowance",
+        "/browse/benefits/disability" => "welfare/disability",
+        "/browse/benefits/child" => "welfare/child-benefit",
+        "/browse/benefits/families" => "welfare/families",
+        "/browse/benefits/heating" => "welfare/heating",
+        "/browse/benefits/bereavement" => "welfare/bereavement",
 
         # Births, deaths, marriages and care
         "/browse/births-deaths-marriages" => "life-circumstances",
@@ -76,7 +70,6 @@ module Taxonomies
         "/browse/births-deaths-marriages/child-adoption" => "life-circumstances/child-adoption",
         "/browse/births-deaths-marriages/lasting-power-attorney" => "life-circumstances/lasting-power-attorney",
         "/browse/births-deaths-marriages/marriage-divorce" => "life-circumstances/marriage-divorce",
-
 
         # Business and self employed
         "/browse/business/" => "business-and-industry",
@@ -179,7 +172,7 @@ module Taxonomies
         "/browse/environment-countryside/coasts" => "environment/river-maintenance-flooding-coastal-erosion", # TBC
         "/browse/environment-countryside/countryside" => "environment/countryside",
         "/browse/environment-countryside/fishing-hunting" => "environment/rural-and-countryside", # TBC
-        "/browse/environment-countryside/flooding-extreme-weather" => "environment/rural-and-countryside", #TBC
+        "/browse/environment-countryside/flooding-extreme-weather" => "environment/rural-and-countryside", # TBC
         "/browse/environment-countryside/recycling-waste-management" => "environment/waste-and-recycling",
         "/browse/environment-countryside/treasure-wrecks" => "environment/rural-and-countryside", # TBC
         "/browse/environment-countryside/wildlife-biodiversity" => "environment/wildlife-animals-biodiversity-and-ecosystems",
@@ -201,14 +194,13 @@ module Taxonomies
         # Money and tax
         "/browse/tax" => "money",
         "/browse/tax/capital-gains" => "money/personal-tax",
-        "/browse/tax/court-claims-debt-bankruptcy" =>  "money/court-claims-debt-bankruptcy",
-        "/browse/tax/dealing-with-hmrc" =>  "money/dealing-with-hmrc",
-        "/browse/tax/income-tax" =>  "money/income-tax" ,
-        "/browse/tax/inheritance-tax" =>  "money/personal-tax-inheritance-tax",
-        "/browse/tax/national-insurance" =>  "money/national-insurance",
-        "/browse/tax/self-assessment" =>  "money/self-assessment",
+        "/browse/tax/court-claims-debt-bankruptcy" => "money/court-claims-debt-bankruptcy",
+        "/browse/tax/dealing-with-hmrc" => "money/dealing-with-hmrc",
+        "/browse/tax/income-tax" => "money/income-tax",
+        "/browse/tax/inheritance-tax" => "money/personal-tax-inheritance-tax",
+        "/browse/tax/national-insurance" => "money/national-insurance",
+        "/browse/tax/self-assessment" => "money/self-assessment",
         "/browse/tax/vat" => "money/vat",
-
 
         # Passports, travel and living abroad
         "/browse/abroad" => "going-and-being-abroad",
@@ -216,30 +208,30 @@ module Taxonomies
         "/browse/abroad/passports" => "going-and-being-abroad/passports",
         "/browse/abroad/travel-abroad" => "going-and-being-abroad/travel-abroad",
 
-
         # Visas and immigration
         "/browse/visas-immigration" => "entering-staying-uk",
-#        "/browse/visas-immigration/what-you-need-to-do" => "",
+        "/browse/visas-immigration/guidance-for-tax-advisers-and-agents" => "guidance-for-tax-advisers-and-agents",
+        #        "/browse/visas-immigration/what-you-need-to-do" => "",
         "/browse/visas-immigration/eu-eea-commonwealth" => "entering-staying-uk/rights-eu-eea-citizens",
-        "/browse/visas-immigration/tourist-short-stay-visas" =>  "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
-        "/browse/visas-immigration/family-visas" =>  "entering-staying-uk/family-visas",
-        "/browse/visas-immigration/immigration-appeals" =>  "entering-staying-uk/asylum-decisions-appeals", # one of 2
-        "/browse/visas-immigration/settle-in-the-uk" =>  "entering-staying-uk/permanent-stay-uk",
-        "/browse/visas-immigration/asylum/student-visas" =>  "entering-staying-uk/student-visas" ,
-        "/browse/visas-immigration/arriving-in-the-uk" =>  "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
+        "/browse/visas-immigration/tourist-short-stay-visas" => "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
+        "/browse/visas-immigration/family-visas" => "entering-staying-uk/family-visas",
+        "/browse/visas-immigration/immigration-appeals" => "entering-staying-uk/asylum-decisions-appeals", # one of 2
+        "/browse/visas-immigration/settle-in-the-uk" => "entering-staying-uk/permanent-stay-uk",
+        "/browse/visas-immigration/asylum/student-visas" => "entering-staying-uk/student-visas",
+        "/browse/visas-immigration/arriving-in-the-uk" => "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
         "/browse/visas-immigration/work-visas" => "entering-staying-uk/Foreign-nationals-working-in-UK",
 
         # Working, jobs and pensions
-        "/browse/working" =>  "employment/working",
-        "/browse/working/armed-forces" =>  "defence/working-armed-forces",
-        "/browse/working/finding-job" =>  "employment/finding-job",
-        "/browse/working/time-off"  =>  "employment/time-off",
-        "/browse/working/redundancies-dismissals"  =>  "employment/redundancies-dismissals",
-        "/browse/working/state-pension"  =>  "employment/working-state-pension",
-        "/browse/working/workplace-personal-pensions"  =>  "employment/workplace-personal-pensions",
-        "/browse/working/contract-working-hours"  =>  "employment/contract-working-hours",
-        "/browse/working/tax-minimum-wage"  =>  "employment/tax-minimum-wage",
-        "/browse/working/rights-trade-unions"  =>  "employment/rights-trade-unions",
+        "/browse/working" => "employment/working",
+        "/browse/working/armed-forces" => "defence/working-armed-forces",
+        "/browse/working/finding-job" => "employment/finding-job",
+        "/browse/working/time-off" => "employment/time-off",
+        "/browse/working/redundancies-dismissals" => "employment/redundancies-dismissals",
+        "/browse/working/state-pension" => "employment/working-state-pension",
+        "/browse/working/workplace-personal-pensions" => "employment/workplace-personal-pensions",
+        "/browse/working/contract-working-hours" => "employment/contract-working-hours",
+        "/browse/working/tax-minimum-wage" => "employment/tax-minimum-wage",
+        "/browse/working/rights-trade-unions" => "employment/rights-trade-unions",
 
         #### SPECIALIST TOPICS ###########
 
@@ -436,7 +428,6 @@ module Taxonomies
         "/topic/work-careers/trade-unions" => "",
 
         # Working at sea
-
 
       }
   end
