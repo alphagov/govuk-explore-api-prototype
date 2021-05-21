@@ -62,6 +62,22 @@ private
       subs = subtopics.map { |sub| { title: sub["title"], link: sub["base_path"] } }
     end
 
+    # TODO: This is hard coded for now. Refactor when we have more than one.
+    puts "TOPIC SLUG IS #{topic_slug}"
+    # if topic_slug == "visas-imigration"
+    #   puts "ADDING FAKE SUB-TOPIC"
+    #   subs << {
+    #     title: "TEST",
+    #     link: "https://www.gov.uk",
+    #   }
+    # end
+
+    puts "ADDING FAKE SUB-TOPIC"
+    subs << {
+      title: "Guidance for advisers and caseworkers",
+      link: "/browse/visas-immigration/guidance-for-tax-advisers-and-agents",
+    }
+
     payload = {
       title: content_item["title"],
       description: content_item["description"],
@@ -95,15 +111,43 @@ private
     puts "fetching #{url}"
     content_item = http_get(url).parsed_response
 
-    payload = {
-      title: content_item["title"],
-      description: content_item["description"],
-      parent:
-        {
-          link: content_item["links"]["parent"][0]["base_path"],
-          title: content_item["links"]["parent"][0]["title"],
-        },
-    }
+    visas_topic = load_fake_sub_topics.first if subtopic_slug == "guidance-for-tax-advisers-and-agents"
+    tax_guidance = visas_topic.specialist_topics.first if subtopic_slug == "guidance-for-tax-advisers-and-agents" && visas_topic
+
+    payload = if subtopic_slug == "guidance-for-tax-advisers-and-agents"
+                visas_topic = load_fake_sub_topics.first
+                tax_guidance = visas_topic.specialist_topics.first
+                {
+                  title: tax_guidance.title,
+                  description: tax_guidance.description,
+                  parent:
+                    {
+                      link: visas_topic.link,
+                      title: visas_topic.title,
+                    },
+                }
+
+              else
+                {
+                  title: content_item["title"],
+                  description: content_item["description"],
+                  parent:
+                    {
+                      link: content_item["links"]["parent"][0]["base_path"],
+                      title: content_item["links"]["parent"][0]["title"],
+                    },
+                }
+              end
+
+    payload["subtopic_sections"] = if subtopic_slug == "guidance-for-tax-advisers-and-agents"
+                                     {
+                                       items: fake_accordion_content(tax_guidance),
+                                     }
+                                   else
+                                     {
+                                       items: accordion_content(content_item, topic_type),
+                                     }
+                                   end
 
     taxon_search_filter = (Taxonomies.taxon_filter_lookup("/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}") || "")
     if taxon_search_filter != ""
@@ -123,9 +167,12 @@ private
       payload[:related_topics] = related_topics(content_item)
     end
 
-    payload["subtopic_sections"] = { items: accordion_content(content_item, topic_type) }
-
     render json: payload
+  end
+
+  def load_fake_sub_topics
+    topics ||= Topic.load_all
+    topics
   end
 
   def related_topics(subtopic_details)
@@ -168,6 +215,23 @@ private
         content: { html: "<ul class='govuk-list'>#{list}</ul>" },
       }
     }.compact
+  end
+
+  def fake_accordion_content(specialist_topic)
+    specialist_topic.sections.map do |section|
+      {
+        heading: { text: section.label },
+        content: {
+          html: "<ul class='govuk-list'>#{fake_accordion_links(section)}</ul>",
+        },
+      }
+    end
+  end
+
+  def fake_accordion_links(section)
+    section.section_links.map do |link|
+      "<li><a href='#{link.link}'>#{link.text}</a></li>"
+    end
   end
 
   def default_group
