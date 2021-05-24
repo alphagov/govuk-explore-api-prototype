@@ -72,3 +72,24 @@ topics:
             section_links:
               - text: "Immigration Rules, fees, forms and staff guidance"
                 link: "/browse/visas-immigration/guidance-for-tax-advisers-and-agents"
+      - key: "what-you-need-to-do--guidance-for-tax-advisers-and-agents"
+        title: "Guidance for advisers and caseworkers"
+        description: "Immigration Rules, fees, forms and staff guidance"
+        sections:
+          - label: "Immigration Rules"
+            section_links:
+              - text: "Immigration Rules"
+                link: "https://www.gov.uk/guidance/immigration-rules"
+          - label: "Fees and forms"
+            section_links:
+              - text: "Citizenship application forms"
+                link: "https://www.gov.uk/government/collections/citizenship-application-forms"
+              - text: "UK visa and immigration application forms"
+                link: "https://www.gov.uk/government/collections/uk-visa-forms"
+              - text: "UK visa fees"
+                link: "https://www.gov.uk/government/publications/visa-regulations-revised-table"
+          - label: "Immigration staff guidance"
+            section_links:
+              - text: "Appeals (immigration staff guidance)"
+                link: "https://www.gov.uk/government/collections/appeals-modernised-guidance"
+                
