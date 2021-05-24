@@ -64,3 +64,11 @@ topics:
                 link: "https://www.gov.uk/government/collections/children-asylum-instructions"
               - text: "Detention and reporting (asylum instructions)"
                 link: "https://www.gov.uk/government/collections/detention-and-reporting-asylum-instructions"
+      - key: "what-you-need-to-do"
+        title: "What you need to do"
+        description: "Check if you need a UK visa, apply, manage your application, biometric residence permits"
+        sections:
+          - label: "Guidance for advisers and caseworkers"
+            section_links:
+              - text: "Immigration Rules, fees, forms and staff guidance"
+                link: "/browse/visas-immigration/guidance-for-tax-advisers-and-agents"

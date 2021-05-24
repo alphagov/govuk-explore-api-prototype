@@ -111,22 +111,22 @@ private
     puts "fetching #{url}"
     content_item = http_get(url).parsed_response
 
-    visas_topic = load_fake_sub_topics.first if subtopic_slug == "guidance-for-tax-advisers-and-agents"
-    tax_guidance = visas_topic.specialist_topics.first if subtopic_slug == "guidance-for-tax-advisers-and-agents" && visas_topic
+    visas_topic = load_fake_sub_topics.first # if subtopic_slug == "guidance-for-tax-advisers-and-agents"
 
-    payload = if subtopic_slug == "guidance-for-tax-advisers-and-agents"
-                visas_topic = load_fake_sub_topics.first
-                tax_guidance = visas_topic.specialist_topics.first
+
+    sub_topic = visas_topic.specialist_topics.find_all{ |sub| sub.key == subtopic_slug }
+    sub_topic = sub_topic.empty? ? nil : sub_topic.first
+
+    payload = if sub_topic
                 {
-                  title: tax_guidance.title,
-                  description: tax_guidance.description,
+                  title: sub_topic.title,
+                  description: sub_topic.description,
                   parent:
                     {
                       link: visas_topic.link,
                       title: visas_topic.title,
                     },
                 }
-
               else
                 {
                   title: content_item["title"],
@@ -139,9 +139,13 @@ private
                 }
               end
 
-    payload["subtopic_sections"] = if subtopic_slug == "guidance-for-tax-advisers-and-agents"
+    payload["subtopic_sections"] = if sub_topic && sub_topic.key != "guidance-for-tax-advisers-and-agents"
                                      {
-                                       items: fake_accordion_content(tax_guidance),
+                                       items: accordion_content(content_item, topic_type) + fake_accordion_content(sub_topic),
+                                     }
+                                   elsif sub_topic
+                                     {
+                                       items: fake_accordion_content(sub_topic),
                                      }
                                    else
                                      {
