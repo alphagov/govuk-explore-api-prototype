@@ -92,4 +92,19 @@ topics:
             section_links:
               - text: "Appeals (immigration staff guidance)"
                 link: "https://www.gov.uk/government/collections/appeals-modernised-guidance"
-                
+      - key: "settle-in-the-uk"
+        title: "Live permanently in the UK"
+        description: "Ways to settle in the UK and routes to British citizenship"
+        sections:
+          - label: "Guidance for advisers and caseworkers"
+            section_links:
+              - text: "Immigration Rules, fees, forms and staff guidance"
+                link: "/browse/visas-immigration/guidance-for-tax-advisers-and-agents"
+      - key: "asylum"
+        title: "Seek protection or asylum"
+        description: "Claiming asylum as a refugee, the asylum process and support"
+        sections:
+          - label: "Guidance for advisers and caseworkers"
+            section_links:
+              - text: "Immigration Rules, fees, forms and staff guidance"
+                link: "/browse/visas-immigration/guidance-for-tax-advisers-and-agents"
