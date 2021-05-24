@@ -64,7 +64,7 @@ private
 
     # TODO: This is hard coded for now. Refactor when we have more than one.
     puts "TOPIC SLUG IS #{topic_slug}"
-    # if topic_slug == "visas-imigration"
+    # if topic_slug == "visas-immigration"
     #   puts "ADDING FAKE SUB-TOPIC"
     #   subs << {
     #     title: "TEST",
@@ -229,9 +229,7 @@ private
   end
 
   def fake_accordion_links(section)
-    section.section_links.map do |link|
-      "<li><a href='#{link.link}'>#{link.text}</a></li>"
-    end
+    section.section_links.map { |link| "<li><a href='#{link.link}'>#{link.text}</a></li>" }.join
   end
 
   def default_group

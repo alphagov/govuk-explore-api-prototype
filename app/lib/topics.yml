@@ -2,7 +2,7 @@
 topics:
   - key: visas-immigration
     title: "Visas and immigration"
-    link: "/browse/visas-imigration"
+    link: "/browse/visas-immigration"
     specialist_topics:
       - key: "guidance-for-tax-advisers-and-agents"
         title: "Guidance for advisers and caseworkers"
@@ -12,3 +12,9 @@ topics:
             section_links:
               - text: "Immigration Rules "
                 link: "https://www.gov.uk/guidance/immigration-rules"
+          - label: "Fees and forms"
+            section_links:
+              - text: "Citizenship application forms"
+                link: "https://www.gov.uk/government/collections/citizenship-application-forms"
+              - text: "UK visa and immigration application forms"
+                link: "https://www.gov.uk/government/collections/uk-visa-forms"
