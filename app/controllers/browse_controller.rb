@@ -62,21 +62,13 @@ private
       subs = subtopics.map { |sub| { title: sub["title"], link: sub["base_path"] } }
     end
 
-    # TODO: This is hard coded for now. Refactor when we have more than one.
-    puts "TOPIC SLUG IS #{topic_slug}"
-    # if topic_slug == "visas-immigration"
-    #   puts "ADDING FAKE SUB-TOPIC"
-    #   subs << {
-    #     title: "TEST",
-    #     link: "https://www.gov.uk",
-    #   }
-    # end
-
-    puts "ADDING FAKE SUB-TOPIC"
-    subs << {
-      title: "Guidance for advisers and caseworkers",
-      link: "/browse/visas-immigration/guidance-for-tax-advisers-and-agents",
-    }
+    # TODO: This is hard coded for now. Refactor when we have more than a couple.
+    if %w[visas-immigration citizenship].include?(topic_slug)
+      subs << {
+        title: "Visas and immigration operational guidance",
+        link: "/browse/visas-immigration/immigration-operational-guidance",
+      }
+    end
 
     payload = {
       title: content_item["title"],
@@ -111,7 +103,7 @@ private
     puts "fetching #{url}"
     content_item = http_get(url).parsed_response
 
-    visas_topic = load_fake_sub_topics.first # if subtopic_slug == "guidance-for-tax-advisers-and-agents"
+    visas_topic = load_fake_sub_topics.first
 
 
     sub_topic = visas_topic.specialist_topics.find_all{ |sub| sub.key == subtopic_slug }
@@ -139,7 +131,7 @@ private
                 }
               end
 
-    payload["subtopic_sections"] = if sub_topic && sub_topic.key != "guidance-for-tax-advisers-and-agents"
+    payload["subtopic_sections"] = if sub_topic && sub_topic.key != "immigration-operational-guidance"
                                      {
                                        items: accordion_content(content_item, topic_type) + fake_accordion_content(sub_topic),
                                      }
