@@ -6,7 +6,7 @@ topics:
     specialist_topics:
       - key: "immigration-operational-guidance"
         title: "Visas and immigration operational guidance"
-        description: " Immigration Rules, forms and guidance for advisers."
+        description: "Immigration Rules, forms and guidance for advisers."
         sections:
           - label: "Asylum policy"
             section_links:

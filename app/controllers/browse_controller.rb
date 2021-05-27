@@ -142,7 +142,7 @@ private
                                        items << {
                                          heading: { text: "Visas and immigration operational guidance" },
                                          content: {
-                                           html: "<ul class='govuk-list'><li><a href='/browse/visas-immigration/guidance-for-tax-advisers-and-agents'>Immigration Rules, forms and guidance for advisers</a></li></ul>",
+                                           html: "<ul class='govuk-list'><li><a href='/browse/visas-immigration/guidance-for-tax-advisers-and-agents'>Visas and immigration operational guidance</a></li></ul>",
                                          },
                                        }
                                      end
@@ -151,7 +151,7 @@ private
                                        items = items.map do |item|
                                          if item.dig(:heading, :text) == "Forms and guidance"
                                            markup = item.dig(:content, :html)
-                                           item[:content][:html] = markup.gsub("</ul>", "<li><a href='/browse/visas-immigration/immigration-operational-guidance'>Immigration Rules, forms and guidance for advisers</a></li></ul>")
+                                           item[:content][:html] = markup.gsub("</ul>", "<li><a href='/browse/visas-immigration/immigration-operational-guidance'>Visas and immigration operational guidance</a></li></ul>")
                                          end
 
                                          item
