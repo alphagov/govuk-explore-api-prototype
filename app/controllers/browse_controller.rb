@@ -62,6 +62,14 @@ private
       subs = subtopics.map { |sub| { title: sub["title"], link: sub["base_path"] } }
     end
 
+    # TODO: This is hard coded for now. Refactor when we have more than a couple.
+    if %w[visas-immigration citizenship].include?(topic_slug)
+      subs << {
+        title: "Visas and immigration operational guidance",
+        link: "/browse/visas-immigration/immigration-operational-guidance",
+      }
+    end
+
     payload = {
       title: content_item["title"],
       description: content_item["description"],
@@ -95,15 +103,47 @@ private
     puts "fetching #{url}"
     content_item = http_get(url).parsed_response
 
-    payload = {
-      title: content_item["title"],
-      description: content_item["description"],
-      parent:
-        {
-          link: content_item["links"]["parent"][0]["base_path"],
-          title: content_item["links"]["parent"][0]["title"],
-        },
-    }
+    visas_topic = load_fake_sub_topics.first
+
+
+    sub_topic = visas_topic.specialist_topics.find_all{ |sub| sub.key == subtopic_slug }
+    sub_topic = sub_topic.empty? ? nil : sub_topic.first
+
+    payload = if sub_topic
+                {
+                  title: sub_topic.title,
+                  description: sub_topic.description,
+                  parent:
+                    {
+                      link: visas_topic.link,
+                      title: visas_topic.title,
+                    },
+                }
+              else
+                {
+                  title: content_item["title"],
+                  description: content_item["description"],
+                  parent:
+                    {
+                      link: content_item["links"]["parent"][0]["base_path"],
+                      title: content_item["links"]["parent"][0]["title"],
+                    },
+                }
+              end
+
+    payload["subtopic_sections"] = if sub_topic && sub_topic.key != "immigration-operational-guidance"
+                                     {
+                                       items: accordion_content(content_item, topic_type) + fake_accordion_content(sub_topic),
+                                     }
+                                   elsif sub_topic
+                                     {
+                                       items: fake_accordion_content(sub_topic),
+                                     }
+                                   else
+                                     {
+                                       items: accordion_content(content_item, topic_type),
+                                     }
+                                   end
 
     taxon_search_filter = (Taxonomies.taxon_filter_lookup("/#{topic_prefix}/#{topic_slug}/#{subtopic_slug}") || "")
     if taxon_search_filter != ""
@@ -123,9 +163,12 @@ private
       payload[:related_topics] = related_topics(content_item)
     end
 
-    payload["subtopic_sections"] = { items: accordion_content(content_item, topic_type) }
-
     render json: payload
+  end
+
+  def load_fake_sub_topics
+    topics ||= Topic.load_all
+    topics
   end
 
   def related_topics(subtopic_details)
@@ -168,6 +211,21 @@ private
         content: { html: "<ul class='govuk-list'>#{list}</ul>" },
       }
     }.compact
+  end
+
+  def fake_accordion_content(specialist_topic)
+    specialist_topic.sections.map do |section|
+      {
+        heading: { text: section.label },
+        content: {
+          html: "<ul class='govuk-list'>#{fake_accordion_links(section)}</ul>",
+        },
+      }
+    end
+  end
+
+  def fake_accordion_links(section)
+    section.section_links.map { |link| "<li><a href='#{link.link}'>#{link.text}</a></li>" }.join
   end
 
   def default_group
