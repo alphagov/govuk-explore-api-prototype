@@ -138,13 +138,24 @@ private
                                    else
                                      # TODO: hard coding in as a way to "fake routes" to the page for testing
                                      items = accordion_content(content_item, topic_type)
-                                     if topic_slug == "visas-immigration" && subtopic_slug != "what-you-need-to-do"
+                                     if topic_slug == "visas-immigration" && %w[what-you-need-to-do arriving-in-the-uk].exclude?(subtopic_slug)
                                        items << {
                                          heading: { text: "Visas and immigration operational guidance" },
                                          content: {
                                            html: "<ul class='govuk-list'><li><a href='/browse/visas-immigration/guidance-for-tax-advisers-and-agents'>Immigration Rules, forms and guidance for advisers</a></li></ul>",
                                          },
                                        }
+                                     end
+
+                                     if topic_slug == "citizenship" && subtopic_slug == "citizenship"
+                                       items = items.map do |item|
+                                         if item.dig(:heading, :text) == "Forms and guidance"
+                                           markup = item.dig(:content, :html)
+                                           item[:content][:html] = markup.gsub("</ul>", "<li><a href='/browse/visas-immigration/immigration-operational-guidance'>Immigration Rules, forms and guidance for advisers</a></li></ul>")
+                                         end
+
+                                         item
+                                       end
                                      end
 
                                      {
