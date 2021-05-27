@@ -62,8 +62,8 @@ private
       subs = subtopics.map { |sub| { title: sub["title"], link: sub["base_path"] } }
     end
 
-    # TODO: This is hard coded for now. Refactor when we have more than a couple.
-    if %w[visas-immigration citizenship].include?(topic_slug)
+    # TODO: This is hard coded for now. Refactor if we have more than a couple.
+    if topic_slug == "visas-immigration"
       subs << {
         title: "Visas and immigration operational guidance",
         link: "/browse/visas-immigration/immigration-operational-guidance",
