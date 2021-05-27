@@ -138,7 +138,7 @@ private
                                    else
                                      # TODO: hard coding in as a way to "fake routes" to the page for testing
                                      items = accordion_content(content_item, topic_type)
-                                     if topic_slug == "visas-immigration" && %w[what-you-need-to-do arriving-in-the-uk].exclude?(subtopic_slug)
+                                     if topic_slug == "visas-immigration" && subtopic_slug != "arriving-in-the-uk"
                                        items << {
                                          heading: { text: "Visas and immigration operational guidance" },
                                          content: {
