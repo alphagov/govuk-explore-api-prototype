@@ -62,8 +62,8 @@ private
       subs = subtopics.map { |sub| { title: sub["title"], link: sub["base_path"] } }
     end
 
-    # TODO: This is hard coded for now. Refactor when we have more than a couple.
-    if %w[visas-immigration citizenship].include?(topic_slug)
+    # TODO: This is hard coded for now. Refactor if we have more than a couple.
+    if topic_slug == "visas-immigration"
       subs << {
         title: "Visas and immigration operational guidance",
         link: "/browse/visas-immigration/immigration-operational-guidance",
@@ -131,17 +131,35 @@ private
                 }
               end
 
-    payload["subtopic_sections"] = if sub_topic && sub_topic.key != "immigration-operational-guidance"
-                                     {
-                                       items: accordion_content(content_item, topic_type) + fake_accordion_content(sub_topic),
-                                     }
-                                   elsif sub_topic
+    payload["subtopic_sections"] = if sub_topic
                                      {
                                        items: fake_accordion_content(sub_topic),
                                      }
                                    else
+                                     # TODO: hard coding in as a way to "fake routes" to the page for testing
+                                     items = accordion_content(content_item, topic_type)
+                                     if topic_slug == "visas-immigration" && subtopic_slug != "arriving-in-the-uk"
+                                       items << {
+                                         heading: { text: "Visas and immigration operational guidance" },
+                                         content: {
+                                           html: "<ul class='govuk-list'><li><a href='/browse/visas-immigration/guidance-for-tax-advisers-and-agents'>Visas and immigration operational guidance</a></li></ul>",
+                                         },
+                                       }
+                                     end
+
+                                     if topic_slug == "citizenship" && subtopic_slug == "citizenship"
+                                       items = items.map do |item|
+                                         if item.dig(:heading, :text) == "Forms and guidance"
+                                           markup = item.dig(:content, :html)
+                                           item[:content][:html] = markup.gsub("</ul>", "<li><a href='/browse/visas-immigration/immigration-operational-guidance'>Visas and immigration operational guidance</a></li></ul>")
+                                         end
+
+                                         item
+                                       end
+                                     end
+
                                      {
-                                       items: accordion_content(content_item, topic_type),
+                                       items: items,
                                      }
                                    end
 
