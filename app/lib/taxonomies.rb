@@ -210,16 +210,19 @@ module Taxonomies
 
         # Visas and immigration
         "/browse/visas-immigration" => "entering-staying-uk",
-        "/browse/visas-immigration/guidance-for-tax-advisers-and-agents" => "guidance-for-tax-advisers-and-agents",
-        #        "/browse/visas-immigration/what-you-need-to-do" => "",
+        "/browse/visas-immigration/arriving-in-the-uk" => "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
+        "/browse/visas-immigration/asylum" => "entering-staying-uk/refugees-asylum-human-rights",
+        "/browse/visas-immigration/asylum/student-visas" => "entering-staying-uk/student-visas",
         "/browse/visas-immigration/eu-eea-commonwealth" => "entering-staying-uk/rights-eu-eea-citizens",
-        "/browse/visas-immigration/tourist-short-stay-visas" => "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
+        "/browse/visas-immigration/eu-eea-swiss" => "entering-staying-uk/rights-eu-eea-citizens",
         "/browse/visas-immigration/family-visas" => "entering-staying-uk/family-visas",
+        "/browse/visas-immigration/guidance-for-tax-advisers-and-agents" => "guidance-for-tax-advisers-and-agents",
         "/browse/visas-immigration/immigration-appeals" => "entering-staying-uk/asylum-decisions-appeals", # one of 2
         "/browse/visas-immigration/settle-in-the-uk" => "entering-staying-uk/permanent-stay-uk",
-        "/browse/visas-immigration/asylum/student-visas" => "entering-staying-uk/student-visas",
-        "/browse/visas-immigration/arriving-in-the-uk" => "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
+        "/browse/visas-immigration/student-visas" => "entering-staying-uk/student-visas",
+        "/browse/visas-immigration/tourist-short-stay-visas" => "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
         "/browse/visas-immigration/work-visas" => "entering-staying-uk/Foreign-nationals-working-in-UK",
+        #        "/browse/visas-immigration/what-you-need-to-do" => "",
 
         # Working, jobs and pensions
         "/browse/working" => "employment/working",
