@@ -142,7 +142,7 @@ private
                                        items << {
                                          heading: { text: "Visas and immigration operational guidance" },
                                          content: {
-                                           html: "<ul class='govuk-list'><li><a href='/browse/visas-immigration/guidance-for-tax-advisers-and-agents'>Visas and immigration operational guidance</a></li></ul>",
+                                           html: "<ul class='govuk-list'><li><a href='/browse/visas-immigration/immigration-operational-guidance'>Visas and immigration operational guidance</a></li></ul>",
                                          },
                                        }
                                      end
