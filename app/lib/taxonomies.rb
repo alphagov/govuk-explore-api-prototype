@@ -213,6 +213,7 @@ module Taxonomies
         "/browse/visas-immigration/arriving-in-the-uk" => "entering-staying-uk/travel-identity-documents-for-foreign-nationals",
         "/browse/visas-immigration/asylum" => "entering-staying-uk/refugees-asylum-human-rights",
         "/browse/visas-immigration/asylum/student-visas" => "entering-staying-uk/student-visas",
+        "/browse/visas-immigration/commonwealth-british-nationals-overseas" => "/entering-staying-uk/rights-nationals-from-outside-eu-eea",
         "/browse/visas-immigration/eu-eea-commonwealth" => "entering-staying-uk/rights-eu-eea-citizens",
         "/browse/visas-immigration/eu-eea-swiss" => "entering-staying-uk/rights-eu-eea-citizens",
         "/browse/visas-immigration/family-visas" => "entering-staying-uk/family-visas",
